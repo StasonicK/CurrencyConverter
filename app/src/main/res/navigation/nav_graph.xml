@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_converter">
+<fragment
+    android:id="@+id/fragment_converter"
+    android:name="com.eburg_soft.currencyconverter.ui.converter.ConverterFragment"
+    android:label="Converter"
+    tools:layout="@layout/fragment_converter"
+    >
+    <action
+        android:id="@+id/open_history"
+        app:destination="@id/fragment_history"
+        />
+
+</fragment>
+
+    <fragment
+        android:id="@+id/fragment_history"
+        android:name="com.eburg_soft.currencyconverter.ui.history.HistoryListFragment"
+        tools:layout="@layout/fragment_history"
+        />
+</navigation>
