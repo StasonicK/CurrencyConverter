@@ -1,14 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.converter.ConverterFragment">
+    tools:context=".features.converter.ui.ConverterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <Spinner
+        android:id="@+id/spSecondCurrencyType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/currencyTypes"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSecondCurrencyTypeDescription"
+        app:layout_constraintStart_toStartOf="@+id/spFirstCurrencyType"
+        app:layout_constraintTop_toTopOf="@+id/tvSecondCurrencyTypeDescription" />
+
+    <EditText
+        android:id="@+id/etFirstCurrencyNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:hint="@string/_1_00"
+        android:inputType="number"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFirstCurrencyNumberDescription"
+        app:layout_constraintStart_toEndOf="@+id/tvFirstCurrencyNumberDescription"
+        app:layout_constraintTop_toTopOf="@+id/tvFirstCurrencyNumberDescription" />
+
+    <Spinner
+        android:id="@+id/spFirstCurrencyType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/currencyTypes"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintBottom_toBottomOf="@+id/tvFirstCurrencyTypeDescription"
+        app:layout_constraintStart_toStartOf="@+id/etFirstCurrencyNumber"
+        app:layout_constraintTop_toTopOf="@+id/tvFirstCurrencyTypeDescription" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvFirstCurrencyNumberDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_very_large"
+        android:layout_marginTop="@dimen/margin_very_large"
+        android:text="@string/first_currentcy_number"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvFirstCurrencyTypeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_very_large"
+        android:text="@string/first_currentcy_type"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintEnd_toEndOf="@+id/tvFirstCurrencyNumberDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstCurrencyNumberDescription" />
+
+    <TextView
+        android:id="@+id/tvSecondCurrencyTypeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/second_currentcy_type"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintEnd_toEndOf="@+id/tvFirstCurrencyTypeDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstCurrencyTypeDescription" />
+
+    <TextView
+        android:id="@+id/tvResultSecondCurrencyNumberDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_very_large"
+        android:text="@string/second_currency_number"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintEnd_toEndOf="@+id/tvSecondCurrencyTypeDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvSecondCurrencyTypeDescription" />
+
+    <TextView
+        android:id="@+id/tvResultSecondCurrencyNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/_1_00"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_standard"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tvResultSecondCurrencyNumberDescription"
+        app:layout_constraintStart_toStartOf="@+id/spSecondCurrencyType"
+        app:layout_constraintTop_toTopOf="@+id/tvResultSecondCurrencyNumberDescription" />
+
+    <Button
+        android:id="@+id/btnCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:text="@string/count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvResultSecondCurrencyNumberDescription" />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_big"
+        android:text="@string/clear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCount" />
+
+    <include
+        android:id="@+id/pbConverter"
+        layout="@layout/pb"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

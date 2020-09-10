@@ -7,18 +7,19 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.R.layout
-import com.eburg_soft.currencyconverter.data.di.Scopes
-import toothpick.Toothpick
+import timber.log.Timber
 
-class BaseActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_base)
+        setContentView(layout.activity_main)
 
         initController()
+
+        Timber.d("MainActivity is created")
     }
 
     private fun initController() {

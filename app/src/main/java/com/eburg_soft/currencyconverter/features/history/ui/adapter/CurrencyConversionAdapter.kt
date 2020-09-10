@@ -1,12 +1,13 @@
-package com.eburg_soft.currencyconverter.features.history.ui
+package com.eburg_soft.currencyconverter.features.history.ui.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.extensions.inflate
-import com.eburg_soft.currencyconverter.features.history.ui.CurrencyConversionAdapter.CurrencyConversionHolder
+import com.eburg_soft.currencyconverter.features.history.ui.adapter.CurrencyConversionAdapter.CurrencyConversionHolder
 import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvCurrenciesRate
 import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvDate
 import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvFirstCurrencyNumber
@@ -16,11 +17,11 @@ import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvSecon
 
 class CurrencyConversionAdapter() : RecyclerView.Adapter<CurrencyConversionHolder>() {
 
-    private lateinit var currencyConversations: List<CurrencyConversionEntity>
+    private lateinit var currencyConversions: List<CurrencyConversionEntity>
 
-    inner class CurrencyConversionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CurrencyConversionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun populateView(currencyConversionEntity: CurrencyConversionEntity) {
+        fun bind(currencyConversionEntity: CurrencyConversionEntity) {
             itemView.apply {
                 tvFirstCurrencyNumber.text = currencyConversionEntity.firstCurrencyNumber.toString()
                 tvSecondCurrencyNumber.text = currencyConversionEntity.secondCurrencyNumber.toString()
@@ -39,10 +40,20 @@ class CurrencyConversionAdapter() : RecyclerView.Adapter<CurrencyConversionHolde
 
     override fun onBindViewHolder(holder: CurrencyConversionHolder, position: Int) {
         holder.apply {
-            populateView(currencyConversations[position])
+            bind(currencyConversions[position])
         }
     }
 
-    override fun getItemCount(): Int = currencyConversations.size
+    override fun getItemCount(): Int = currencyConversions.size
+
+    fun updateAdapter(updatedList: List<CurrencyConversionEntity>) {
+        val result = DiffUtil.calculateDiff(CurrencyConversionsDiffCallback(currencyConversions, updatedList))
+        this.currencyConversions = updatedList.toMutableList()
+        result.dispatchUpdatesTo(this)
+    }
+
+    fun setData(currencyConversions: List<CurrencyConversionEntity>) {
+        this.currencyConversions = currencyConversions
+    }
 }
 
