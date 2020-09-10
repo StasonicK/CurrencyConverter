@@ -27,7 +27,7 @@ import timber.log.Timber
 
 class ConverterFragment : Fragment() {
 
-    private lateinit var menu: Menu
+    private var menu: Menu? = null
     private lateinit var navController: NavController
 
     companion object {
@@ -60,7 +60,6 @@ class ConverterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        observeLiveData()
 
         Timber.d("ConverterFragment is onActivityCreated()")
     }
@@ -70,6 +69,7 @@ class ConverterFragment : Fragment() {
 
         setNevController(view)
         setupListeners()
+        observeLiveData()
 
         Timber.d("ConverterFragment is onViewCreated()")
     }
@@ -164,9 +164,11 @@ class ConverterFragment : Fragment() {
     }
 
     private fun showHistoryAction(isShowing: Boolean) {
-        menu.findItem(R.id.menu_action_history_fragment).apply {
-            isVisible = isShowing
-            isEnabled = isShowing
+        menu?.let {
+            it.findItem(R.id.menu_action_history_fragment).apply {
+                isVisible = isShowing
+                isEnabled = isShowing
+            }
         }
     }
 }
