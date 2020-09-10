@@ -1,4 +1,4 @@
-package com.eburg_soft.currencyconverter.ui.converter
+package com.eburg_soft.currencyconverter.features.converter.viewmodels
 
 import androidx.lifecycle.ViewModel
 

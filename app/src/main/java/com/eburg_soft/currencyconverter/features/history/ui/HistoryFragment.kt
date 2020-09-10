@@ -1,4 +1,4 @@
-package com.eburg_soft.currencyconverter.ui.converter
+package com.eburg_soft.currencyconverter.features.history.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.eburg_soft.currencyconverter.R
 
-class ConverterFragment : Fragment() {
+class HistoryListFragment : Fragment() {
 
     companion object {
-        fun newInstanse() = ConverterFragment()
+
+        fun newInstance() = HistoryListFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,6 @@ class ConverterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_converter, container, false)
+        return inflater.inflate(R.layout.fragment_history_list, container, false)
     }
 }
