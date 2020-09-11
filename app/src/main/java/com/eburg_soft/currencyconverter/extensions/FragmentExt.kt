@@ -9,9 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.eburg_soft.currencyconverter.core.ToothpickViewModelFactory
-import com.eburg_soft.currencyconverter.core.ToothpickViewModelFactoryScoped
+import com.eburg_soft.currencyconverter.data.di.ToothpickViewModelFactory
+import com.eburg_soft.currencyconverter.data.di.ToothpickViewModelFactoryScoped
 import kotlin.reflect.KClass
 
 fun <T : Any?> Fragment.observe(liveData: LiveData<T>, observer: (T) -> Unit) {

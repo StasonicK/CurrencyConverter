@@ -10,18 +10,12 @@ import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyC
 import javax.inject.Inject
 
 class CurrencyConversionRepositoryImpl @Inject constructor(
-//    private val currencyConversionDao: CurrencyConversionDao,
     private val currencyConversionDatabase: CurrencyConversionDatabase,
     private val currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
 ) :
     CurrencyConversionRepository {
 
     private val currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
-//    @Inject
-//    private lateinit var currencyConversionDao: CurrencyConversionDao
-//
-//    @Inject
-//    private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
 
     init {
 //        Toothpick.inject(this, Toothpick.openScope(Scopes.APP))

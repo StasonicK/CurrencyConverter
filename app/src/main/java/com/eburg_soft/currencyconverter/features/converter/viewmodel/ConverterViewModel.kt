@@ -65,11 +65,12 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
         secondCurrenciesType: String
     ) {
         viewModelScope.launch {
-            NetworkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
+            val networkToEntityMapper = NetworkToEntityMapper()
+            networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
             val currencies = "$firstCurrenciesType,$secondCurrenciesType"
             val currencyConversionResult = currencyConversionRepository.getExchangeRates(currencies)
             if (isResultSuccess(currencyConversionResult.resultType)) {
-                onResultSuccess(NetworkToEntityMapper.map(currencyConversionResult.data))
+                onResultSuccess(networkToEntityMapper.map(currencyConversionResult.data))
             } else {
                 onResultError()
             }

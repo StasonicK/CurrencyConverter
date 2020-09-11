@@ -41,7 +41,7 @@ class HistoryFragment : Fragment() {
 
         observerLiveData()
 
-        Timber.d("ConverterFragment is onViewCreated()")
+        Timber.d("%s is onViewCreated()", this::class.java.simpleName)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class HistoryFragment : Fragment() {
 
 //        viewModel = injectViewModel(HistoryViewModel::class, Scopes.HISTORY)
 
-        Timber.d("ConverterFragment is onActivityCreated()")
+        Timber.d("s% is onActivityCreated()", this::class.java.simpleName)
     }
 
     override fun onStart() {

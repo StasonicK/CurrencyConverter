@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         initController()
 
-        Timber.d("MainActivity is created")
+        Timber.d("onCreate()")
     }
 
     private fun initController() {

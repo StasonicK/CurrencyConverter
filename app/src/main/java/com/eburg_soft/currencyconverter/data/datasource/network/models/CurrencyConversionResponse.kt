@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CurrencyConversionResponse(
     @SerializedName("rates")
-    var rates: Map<String, Double>? = null,
+    var rates: HashMap<String, Double>? = null,
 
     @SerializedName("base")
     var base: String? = null,

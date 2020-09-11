@@ -28,7 +28,8 @@ class App : Application() {
     }
 
     private fun initToothpick() {
-        if (BuildConfig.DEBUG) Configuration.forDevelopment().preventMultipleRootScopes() else Configuration.forProduction()
+        if (BuildConfig.DEBUG) Configuration.forDevelopment()
+            .preventMultipleRootScopes() else Configuration.forProduction()
 
         Toothpick.openScope(Scopes.APP)
             .installModules(DatabaseModule(this), NetworkModule(), RepositoryModule())

@@ -60,8 +60,7 @@ class ConverterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
-        Timber.d("ConverterFragment is onActivityCreated()")
+        Timber.d("onActivityCreated()")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +70,7 @@ class ConverterFragment : Fragment() {
         setupListeners()
         observeLiveData()
 
-        Timber.d("ConverterFragment is onViewCreated()")
+        Timber.d("onViewCreated()")
     }
 
     override fun onCreateView(
