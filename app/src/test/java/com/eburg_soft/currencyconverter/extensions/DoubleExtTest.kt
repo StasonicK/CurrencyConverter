@@ -79,7 +79,7 @@ class DoubleExtTest {
 
     /*
         Set number to the field,
-        get resulting number
+        - get resulting number
      */
     @Test
     @Throws(Exception::class)
@@ -95,7 +95,7 @@ class DoubleExtTest {
 
     /*
         Set zero to the field,
-        get Arithmetic exception
+        - throw Arithmetic exception
      */
     @Test
     @Throws(Exception::class)

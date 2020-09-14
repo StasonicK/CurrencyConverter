@@ -1,44 +1,21 @@
 package com.eburg_soft.currencyconverter.data.datasource.database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.eburg_soft.currencyconverter.data.datasource.network.CurrencyConversionNetworkDataSource
-import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionRepositoryImpl
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
+import com.eburg_soft.currencyconverter.utils.LiveDataTestUtil
+import com.eburg_soft.currencyconverter.utils.TestUtil
+import kotlinx.coroutines.runBlocking
 import org.junit.*
-import org.junit.Test
-import org.junit.jupiter.api.*
-import org.mockito.*
+import org.junit.runner.*
+import kotlin.system.measureTimeMillis
 
-abstract class CurrencyConversionEntityRepositoryDaoTest : CurrencyConversionEntityRepositoryDatabaseTest() {
-
-    private lateinit var mockitoSession: MockitoSession
-
-    //    private lateinit var currencyConversionDao: CurrencyConversionDao
-    private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
-    private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
-    private lateinit var currencyConversionRepositoryImpl: CurrencyConversionRepositoryImpl
-
-    private fun <T> any(type: Class<T>): T = Mockito.any(type)
-
-    @BeforeEach
-    fun initEach() {
-        mockitoSession = Mockito.mockitoSession()
-            .initMocks(this)
-            .startMocking()
-
-        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
-        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
-        currencyConversionRepositoryImpl =
-            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
-    }
-
-    @AfterEach
-    fun finishEach() {
-        mockitoSession.finishMocking()
-    }
+class CurrencyConversionDaoTest : CurrencyConversionDatabaseTest() {
 
     @Rule
     @JvmField
-    var rule = InstantTaskExecutorRule()
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     /*
         Insert a currency conversion,
@@ -47,26 +24,72 @@ abstract class CurrencyConversionEntityRepositoryDaoTest : CurrencyConversionEnt
      */
     @Test
     @Throws(Exception::class)
-    fun insertReadDeleteOneCurrencyConversion() {
+    fun insertReadDeleteOneCurrencyConversion() = runBlocking {
+        val expectedCurrencyConversion = TestUtil.CURRENCY_CONVERSION_ONE
+
         //  insert
-//        val currencyConversion =
+        val costTimeMillis = measureTimeMillis {
+            getCurrencyConversionDao().insertCurrencyConversion(expectedCurrencyConversion)
+        }
+
+        //  read
+        val liveDataTestUtil = LiveDataTestUtil<List<CurrencyConversionEntity>>()
+        var insertedCurrencyConversions: List<CurrencyConversionEntity>? =
+            liveDataTestUtil.getValue(getCurrencyConversionDao().getAllCurrencyConversions())
+        expectedCurrencyConversion.conversionId = 1
+        Assert.assertNotNull(insertedCurrencyConversions)
+        Assert.assertEquals(expectedCurrencyConversion, insertedCurrencyConversions?.get(0))
+
+        //  delete
+        getCurrencyConversionDao().deleteAllCurrencyConversions()
+
+        //  read
+        insertedCurrencyConversions =
+            liveDataTestUtil.getValue(getCurrencyConversionDao().getAllCurrencyConversions())
+        Assert.assertEquals(0, insertedCurrencyConversions?.size)
+        println("passed time: $costTimeMillis")
     }
 
     /*
-        Insert currency conversions,
-        read ids,
-        delete a currency conversions
-     */
-
-    /*
-        Insert a currency conversion,
+        Insert 2 currency conversions,
+        read a currency conversions,
+        delete a currency conversion,
         read a currency conversion,
-        delete a currency conversion
+        delete the last currency conversion
      */
+    @Test
+    @Throws(Exception::class)
+    fun insertReadDeleteReadDeleteCurrencyConversions() = runBlocking {
+        val expectedCurrencyConversion1 = TestUtil.CURRENCY_CONVERSION_ONE
+        val expectedCurrencyConversion2 = TestUtil.CURRENCY_CONVERSION_TWO
 
-    /*
-        Insert a currency conversion,
-        read a currency conversion,
-        delete a currency conversion
-     */
+        //  insert
+        val costTimeMillis = measureTimeMillis {
+            getCurrencyConversionDao().insertCurrencyConversion(expectedCurrencyConversion1)
+            getCurrencyConversionDao().insertCurrencyConversion(expectedCurrencyConversion2)
+        }
+
+        //  read
+        val liveDataTestUtil = LiveDataTestUtil<List<CurrencyConversionEntity>>()
+        var insertedCurrencyConversions: List<CurrencyConversionEntity>? =
+            liveDataTestUtil.getValue(getCurrencyConversionDao().getAllCurrencyConversions())
+        expectedCurrencyConversion1.conversionId = 1
+        expectedCurrencyConversion2.conversionId = 2
+        Assert.assertNotNull(insertedCurrencyConversions)
+        Assert.assertEquals(expectedCurrencyConversion1, insertedCurrencyConversions?.get(0))
+        Assert.assertEquals(expectedCurrencyConversion2, insertedCurrencyConversions?.get(1))
+
+        //  delete
+        insertedCurrencyConversions?.get(0)?.let { getCurrencyConversionDao().deleteCurrencyConversion(it) }
+
+        //  read
+        insertedCurrencyConversions =
+            liveDataTestUtil.getValue(getCurrencyConversionDao().getAllCurrencyConversions())
+        Assert.assertNotNull(insertedCurrencyConversions)
+        Assert.assertEquals(expectedCurrencyConversion2, insertedCurrencyConversions?.get(0))
+
+        //  delete
+        insertedCurrencyConversions?.get(0)?.let { getCurrencyConversionDao().deleteCurrencyConversion(it) }
+        println("passed time: $costTimeMillis")
+    }
 }

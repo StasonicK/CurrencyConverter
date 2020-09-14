@@ -34,7 +34,7 @@ class CurrencyConversionRepositoryImpl
     }
 
     override suspend fun removeAllCurrenciesConversions() {
-        currencyConversionDao.deleteCurrencyConversions()
+        currencyConversionDao.deleteAllCurrencyConversions()
     }
 
     override suspend fun getExchangeRates(currencies: String): Result<CurrencyConversionResponse> {
