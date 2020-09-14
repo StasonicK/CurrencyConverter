@@ -24,11 +24,11 @@ abstract class CurrencyConversionEntityRepositoryDaoTest : CurrencyConversionEnt
         mockitoSession = Mockito.mockitoSession()
             .initMocks(this)
             .startMocking()
-//
-//        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
-//        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
-//        currencyConversionRepositoryImpl =
-//            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
+
+        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
+        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
+        currencyConversionRepositoryImpl =
+            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
     }
 
     @AfterEach
