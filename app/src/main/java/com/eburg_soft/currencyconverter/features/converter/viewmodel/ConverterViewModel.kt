@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import toothpick.Toothpick
 import javax.inject.Inject
 
-class ConverterViewModel @Inject constructor(private val currencyConversionRepository: CurrencyConversionRepository) :
+class ConverterViewModel
+@Inject constructor(private val currencyConversionRepository: CurrencyConversionRepository) :
     ViewModel() {
 
     private val secondCurrenciesNumberMutableLiveData: MutableLiveData<Double> = MutableLiveData()
@@ -58,13 +59,16 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
             else:
                 2.1. show error in AlertDialog.
      */
-
     fun saveCurrencyConversion(
         firstCurrencyNumber: String,
         firstCurrenciesType: String,
         secondCurrenciesType: String
     ) {
         viewModelScope.launch {
+            if (firstCurrenciesType == secondCurrenciesType) {
+                secondCurrenciesNumberMutableLiveData.value = firstCurrencyNumber.toDouble()
+                return@launch
+            }
             val networkToEntityMapper = NetworkToEntityMapper()
             networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
             val currencies = "$firstCurrenciesType,$secondCurrenciesType"

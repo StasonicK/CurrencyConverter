@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.data.di.Scopes
@@ -28,7 +27,7 @@ import timber.log.Timber
 class ConverterFragment : Fragment() {
 
     private var menu: Menu? = null
-    private lateinit var navController: NavController
+//    private lateinit var navController: NavController
 
     companion object {
 
@@ -92,7 +91,10 @@ class ConverterFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_action_history_fragment -> {
-                navController.navigate(R.id.open_history_fragment)
+//                navController.navigate(R.id.open_history_fragment)
+//                Navigation.findNavController(requireView()).navigate(R.id.fragment_history_fragment)
+
+//                Navigation.createNavigateOnClickListener(R.id.fragment_history_fragment)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -107,7 +109,7 @@ class ConverterFragment : Fragment() {
     //endregion
 
     private fun setNevController(view: View) {
-        navController = Navigation.findNavController(view)
+//        navController = Navigation.findNavController(view)
     }
 
     private fun setupListeners() {
@@ -128,20 +130,16 @@ class ConverterFragment : Fragment() {
 
     private fun observeLiveData() {
         observe(viewModel.secondCurrenciesNumberLiveData) { setSecondCurrencyNumber(it) }
-//        viewModel.secondCurrenciesNumberLiveData.observe(requireActivity(), Observer(::setSecondCurrencyNumber))
         observe(viewModel.isLoadingLiveData) { showLoading(it) }
-//        viewModel.isLoadingLiveData.observe(requireActivity(), Observer(::showLoading))
         observe(viewModel.isErrorOnLoadingLiveData) { onErrorReceived() }
-//        viewModel.isErrorOnLoadingLiveData.observe(requireActivity(), { onErrorReceived() })
         observe(viewModel.isExistingHistorySizeLiveData) { showHistoryAction(it) }
-//        viewModel.isExistingHistorySizeLiveData.observe(requireActivity(), Observer(::showHistoryAction))
     }
 
     private fun onErrorReceived() {
         AlertDialog.Builder(requireActivity())
             .setTitle(R.string.network_connection_error_title)
             .setCancelable(true)
-            .setNegativeButton(R.string.network_connection_error_cancel) { _, _ -> requireActivity().finish() }
+            .setNegativeButton(R.string.network_connection_error_cancel) { dialog, _ -> dialog.cancel() }
             .setPositiveButton(R.string.network_connection_error_action) { _, _ ->
                 viewModel.saveCurrencyConversion(
                     etFirstCurrencyNumber.text.toString(),

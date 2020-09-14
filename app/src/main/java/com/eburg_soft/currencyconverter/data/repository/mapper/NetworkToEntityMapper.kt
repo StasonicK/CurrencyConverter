@@ -3,7 +3,7 @@ package com.eburg_soft.currencyconverter.data.repository.mapper
 import com.eburg_soft.currencyconverter.core.BaseMapper
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyConversionResponse
-import com.eburg_soft.currencyconverter.extensions.countFirstCurrencyToSecondCurrencyRate
+import com.eburg_soft.currencyconverter.extensions.countCurrenciesRate
 import com.eburg_soft.currencyconverter.extensions.round
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -50,14 +50,14 @@ class NetworkToEntityMapper : BaseMapper<CurrencyConversionResponse, CurrencyCon
             )
         Timber.d("second currency number is counted: %f", secondCurrencyNumber)
 
-        val currencyRate = this.currenciesNumber[0].countFirstCurrencyToSecondCurrencyRate(this.currenciesNumber[1])
+        val currenciesRate = this.currenciesNumber[0].countCurrenciesRate(this.currenciesNumber[1])
         val date = mapDate(type?.date.toString())
         return CurrencyConversionEntity(
             this.firstCurrencyNumber.round(2),
             this.currenciesTypes[1],
             this.secondCurrencyNumber.round(2),
             this.currenciesTypes[0],
-            currencyRate,
+            currenciesRate,
             date
         )
     }

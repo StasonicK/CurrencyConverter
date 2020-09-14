@@ -9,7 +9,8 @@ import com.eburg_soft.currencyconverter.data.datasource.network.CurrencyConversi
 import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyConversionResponse
 import javax.inject.Inject
 
-class CurrencyConversionRepositoryImpl @Inject constructor(
+class CurrencyConversionRepositoryImpl
+@Inject constructor(
     private val currencyConversionDatabase: CurrencyConversionDatabase,
     private val currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
 ) :

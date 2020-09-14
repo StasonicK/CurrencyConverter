@@ -1,14 +1,17 @@
 package com.eburg_soft.currencyconverter.extensions
 
 import timber.log.Timber
-import java.math.RoundingMode.HALF_DOWN
-import java.math.RoundingMode.HALF_EVEN
 import java.math.RoundingMode.HALF_UP
 import java.text.NumberFormat
 import java.util.Locale
 
-fun Double.countFirstCurrencyToSecondCurrencyRate(secondCurrencyRate: Double): Double {
+const val SECOND_CURRENCY_RATE_ZERO = "Second currency rate is 0!"
+
+@Throws(Exception::class)
+fun Double.countCurrenciesRate(secondCurrencyRate: Double): Double {
+    if (secondCurrencyRate == 0.0) throw Exception(SECOND_CURRENCY_RATE_ZERO)
     val number = this / secondCurrencyRate
+
     return number.round(4)
 }
 
@@ -18,13 +21,7 @@ fun Double.round(number: Int): Double {
         roundingMode = HALF_UP
         maximumFractionDigits = number
     }
-    var result = 0.0
-    try {
-        result = nf.format(this).toDouble()
-    } catch (e: Exception) {
-        e.printStackTrace()
-        Timber.e(e, "Exception %s", e.message)
-    }
+    val result = nf.format(this).toDouble()
     Timber.d("Rounded Double is %s", result)
     return result
 }

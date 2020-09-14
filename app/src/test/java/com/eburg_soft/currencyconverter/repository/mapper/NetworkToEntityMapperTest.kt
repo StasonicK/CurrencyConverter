@@ -11,32 +11,6 @@ import org.mockito.*
 class NetworkToEntityMapperTest {
 
 
-    private lateinit var mockitoSession: MockitoSession
-
-    //    private lateinit var currencyConversionDao: CurrencyConversionDao
-    private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
-    private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
-    private lateinit var currencyConversionRepositoryImpl: CurrencyConversionRepositoryImpl
-
-    private fun <T> any(type: Class<T>): T = Mockito.any(type)
-
-    @BeforeEach
-    fun init() {
-//        mockitoSession = Mockito.mockitoSession()
-//            .initMocks(this)
-//            .startMocking()
-//
-//        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
-//        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
-//        currencyConversionRepositoryImpl =
-//            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
-    }
-
-    @AfterEach
-    fun finishEach() {
-//        mockitoSession.finishMocking()
-    }
-
     /*
         Different currency types
         -   Set first currency number,
@@ -94,12 +68,4 @@ class NetworkToEntityMapperTest {
     }
 
 
-    /*
-    Insert note, null title
-    -   confirm throw exception
- */
-    @Test
-    @Throws(Exception::class)
-    fun insertNote_nullTitle_throwException() {
-    }
 }
