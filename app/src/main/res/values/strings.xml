@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">CurrencyConverter</string>
-    <string name="second_currentcy_type">Second currentcy type</string>
+    <string name="second_currency_type">Second currency type</string>
     <string name="second_currency_number">Second currency number</string>
-    <string name="first_currentcy_type">First currentcy type</string>
-    <string name="first_currentcy_number">First currentcy number</string>
+    <string name="first_currency_type">First currency type</string>
+    <string name="first_currency_number">First currency number</string>
     <string name="_1_00">1.00</string>
     <string name="open_history">Open history</string>
     <string name="clear">Clear</string>
@@ -13,6 +13,8 @@
     <string name="network_connection_error_cancel">Cancel</string>
     <string name="network_connection_error_action">Try again</string>
     <string name="history_fragment">History fragment</string>
+    <string name="first_currency_number_is_empty">field \"First currency number\" is empty!</string>
+    <string name="currencies_are_invalid_for_current_date">currencies are invalid for current date!</string>
 
     <string-array name="currencyTypes">
         <item>USD</item>

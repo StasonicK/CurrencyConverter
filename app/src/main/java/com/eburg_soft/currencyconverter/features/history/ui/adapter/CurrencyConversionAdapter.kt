@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvFirst
 import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvSecondCurrencyNumber
 import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvSecondCurrencyType
 
-class CurrencyConversionAdapter() : RecyclerView.Adapter<CurrencyConversionHolder>() {
+class CurrencyConversionAdapter : RecyclerView.Adapter<CurrencyConversionHolder>() {
 
     private lateinit var currencyConversions: List<CurrencyConversionEntity>
 

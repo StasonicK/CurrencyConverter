@@ -10,9 +10,9 @@ const val SECOND_CURRENCY_RATE_ZERO = "Second currency rate is 0!"
 @Throws(Exception::class)
 fun Double.countCurrenciesRate(secondCurrencyRate: Double): Double {
     if (secondCurrencyRate == 0.0) throw Exception(SECOND_CURRENCY_RATE_ZERO)
-    val number = this / secondCurrencyRate
+    val number = secondCurrencyRate / this
 
-    return number.round(4)
+    return number.round(2)
 }
 
 fun Double.round(number: Int): Double {

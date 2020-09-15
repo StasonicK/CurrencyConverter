@@ -8,7 +8,7 @@ import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyC
 interface CurrencyConversionRepository {
 
     fun getAllCurrencyConversions(): LiveData<List<CurrencyConversionEntity>>
-    fun getSizeAllCurrencyConversions(): Int
+//    fun getSizeCurrencyConversionList(): Int
 
     suspend fun saveCurrencyConversion(currencyConversionEntity: CurrencyConversionEntity)
     suspend fun removeAllCurrenciesConversions()

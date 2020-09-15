@@ -1,6 +1,7 @@
 package com.eburg_soft.currencyconverter.features.converter.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,42 +12,54 @@ import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionReposi
 import com.eburg_soft.currencyconverter.data.repository.mapper.NetworkToEntityMapper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import toothpick.Toothpick
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
-class ConverterViewModel
-@Inject constructor(private val currencyConversionRepository: CurrencyConversionRepository) :
+class ConverterViewModel @Inject constructor(private val currencyConversionRepository: CurrencyConversionRepository) :
     ViewModel() {
 
     private val secondCurrenciesNumberMutableLiveData: MutableLiveData<Double> = MutableLiveData()
     val secondCurrenciesNumberLiveData: MutableLiveData<Double>
         get() = secondCurrenciesNumberMutableLiveData
 
-    private val isErrorOnLoadingMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isErrorOnLoadingLiveData: MutableLiveData<Boolean>
-        get() = isErrorOnLoadingMutableLiveData
+    private val errorOnLoadingMutableLiveData: MutableLiveData<String> = MutableLiveData()
+    val errorOnLoadingLiveData: MutableLiveData<String>
+        get() = errorOnLoadingMutableLiveData
 
     private val isLoadingMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val isLoadingLiveData: MutableLiveData<Boolean>
         get() = isLoadingMutableLiveData
 
     private val isExistingHistoryMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isExistingHistorySizeLiveData: LiveData<Boolean>
+    val isExistingHistoryLiveData: LiveData<Boolean>
         get() = isExistingHistoryMutableLiveData
 
     init {
-//        Toothpick.inject(this, Toothpick.openScope(Scopes.CONVERTER))
-        checkHistorySize()
+//        checkHistorySize()
     }
 
     private fun checkHistorySize() {
-        viewModelScope.launch {
-            if (currencyConversionRepository.getSizeAllCurrencyConversions() > 0) {
-                isExistingHistoryMutableLiveData.postValue(true)
-            } else {
-                isExistingHistoryMutableLiveData.postValue(false)
+//        viewModelScope.launch {
+        var currencyConversionListMediatorLiveData: MediatorLiveData<List<CurrencyConversionEntity>> =
+            MediatorLiveData()
+        val source = currencyConversionRepository.getAllCurrencyConversions()
+
+        currencyConversionListMediatorLiveData.addSource(source) {
+            if (it != null) {
+                currencyConversionListMediatorLiveData.value = it
             }
+            currencyConversionListMediatorLiveData.removeSource(source)
         }
+
+//        val liveData = currencyConversionRepository.getAllCurrencyConversions()
+        val value = currencyConversionListMediatorLiveData.value
+        val size = value?.size
+        isExistingHistoryMutableLiveData.value = size!! > 0
+//        }
     }
 
     /*
@@ -59,35 +72,58 @@ class ConverterViewModel
             else:
                 2.1. show error in AlertDialog.
      */
+    // TODO: 15.09.2020 refactor! 
     fun saveCurrencyConversion(
         firstCurrencyNumber: String,
         firstCurrenciesType: String,
         secondCurrenciesType: String
     ) {
         viewModelScope.launch {
-            if (firstCurrenciesType == secondCurrenciesType) {
-                secondCurrenciesNumberMutableLiveData.value = firstCurrencyNumber.toDouble()
-                return@launch
-            }
-            val networkToEntityMapper = NetworkToEntityMapper()
-            networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
-            val currencies = "$firstCurrenciesType,$secondCurrenciesType"
-            val currencyConversionResult = currencyConversionRepository.getExchangeRates(currencies)
-            if (isResultSuccess(currencyConversionResult.resultType)) {
-                onResultSuccess(networkToEntityMapper.map(currencyConversionResult.data))
+            val currencyConversionEntity: CurrencyConversionEntity
+
+            isLoadingMutableLiveData.value = true
+
+            if (firstCurrenciesType != secondCurrenciesType) {
+                val networkToEntityMapper = NetworkToEntityMapper()
+                networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
+                val currencies = "$firstCurrenciesType,$secondCurrenciesType"
+
+                val currencyConversionResult = currencyConversionRepository.getExchangeRates(currencies)
+
+                if (isResultSuccess(currencyConversionResult.resultType)) {
+                    currencyConversionEntity = networkToEntityMapper.map(currencyConversionResult.data)
+                    onResultSuccess(currencyConversionEntity)
+                    secondCurrenciesNumberMutableLiveData.postValue(currencyConversionEntity.secondCurrencyNumber)
+                } else {
+                    onResultError(currencyConversionResult.error)
+                }
             } else {
-                onResultError()
+                currencyConversionEntity = CurrencyConversionEntity(
+                    firstCurrencyNumber.toDouble(),
+                    firstCurrenciesType,
+                    firstCurrencyNumber.toDouble(),
+                    secondCurrenciesType, date = getCurrentDate()
+                )
+                currencyConversionRepository.saveCurrencyConversion(
+                    currencyConversionEntity
+                )
+                secondCurrenciesNumberMutableLiveData.value = firstCurrencyNumber.toDouble()
             }
-
-        }
-    }
-
-    private fun onResultError() {
-        viewModelScope.launch {
             delay(300)
             isLoadingMutableLiveData.value = false
+        }
+        checkHistorySize()
+    }
+
+    private fun onResultError(exception: Exception?) {
+        viewModelScope.launch {
+
+            isLoadingMutableLiveData.value = false
         }.invokeOnCompletion {
-            isErrorOnLoadingMutableLiveData.value = false
+            if (exception is HttpException)
+                exception.let {
+                    errorOnLoadingMutableLiveData.value = "Currencies are invalid for current date"
+                }
         }
     }
 
@@ -101,9 +137,14 @@ class ConverterViewModel
                 currencyConversionRepository.saveCurrencyConversion(it)
                 secondCurrenciesNumberMutableLiveData.postValue(it.secondCurrencyNumber)
             }
-            checkHistorySize()
         }
     }
+
+    private fun getCurrentDate() =
+        SimpleDateFormat(
+            NetworkToEntityMapper.resultDatePattern,
+            Locale.getDefault()
+        ).format(Calendar.getInstance().time)
 
     override fun onCleared() {
         super.onCleared()

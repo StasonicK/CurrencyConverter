@@ -17,6 +17,8 @@ class DatabaseModule(applicationContext: Context) : Module() {
             applicationContext,
             CurrencyConversionDatabase::class.java,
             DATABASE_NAME
-        ).build()
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 }

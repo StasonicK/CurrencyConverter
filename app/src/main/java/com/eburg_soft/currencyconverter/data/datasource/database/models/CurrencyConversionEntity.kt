@@ -11,12 +11,12 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = TABLE_NAME)
 data class CurrencyConversionEntity
     (
-    @ColumnInfo(name = COLUMN_FIRST_CURRENCY_NUMBER) val firstCurrencyNumber: Double? = 0.0,
+    @ColumnInfo(name = COLUMN_FIRST_CURRENCY_NUMBER) val firstCurrencyNumber: Double? = 0.00,
     @ColumnInfo(name = COLUMN_FIRST_CURRENCY_TYPE) val firstCurrencyType: String? = "",
-    @ColumnInfo(name = COLUMN_SECOND_CURRENCY_NUMBER) val secondCurrencyNumber: Double? = 0.0,
+    @ColumnInfo(name = COLUMN_SECOND_CURRENCY_NUMBER) val secondCurrencyNumber: Double? = 0.00,
     @ColumnInfo(name = COLUMN_SECOND_CURRENCY_TYPE) val secondCurrencyType: String? = "",
-    @ColumnInfo(name = COLUMN_CURRENCIES_RATE) val currenciesRate: Double? = 0.0,
-    @ColumnInfo(name = COLUMN_DATE) val date: String
+    @ColumnInfo(name = COLUMN_CURRENCIES_RATE) val currenciesRate: Double? = 1.00,
+    @ColumnInfo(name = COLUMN_DATE) val date: String = ""
 ) : Parcelable {
 
     @ColumnInfo(name = COLUMN_ID)

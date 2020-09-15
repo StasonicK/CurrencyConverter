@@ -11,15 +11,15 @@ object TestUtil {
     val CURRENCY_CONVERSION_EQUAL_TYPES = CurrencyConversionEntity(1.0, "USD", 1.0, "USD", 1.0, "10.09.2020")
 
     val CURRENCY_CONVERSION_RES_ONE = CurrencyConversionResponse(
-        hashMapOf("CAD" to 1.5586, "USD" to 1.1849), "EUR", "2020-09-10"
+        hashMapOf("CAD" to 1.5586, "USD" to 1.1876), "EUR", "2020-09-10"
     )
 
     val CURRENCY_CONVERSION_RES_TWO = CurrencyConversionResponse(
-        hashMapOf("HKD" to 9.1834, "USD" to 1.1849), "EUR", "2020-09-10"
+        hashMapOf("HKD" to 9.1834, "USD" to 1.1876), "EUR", "2020-09-10"
     )
 
     val CURRENCY_CONVERSION_RES_EQUAL_TYPES = CurrencyConversionResponse(
-        hashMapOf("USD" to 1.1849), "EUR", "2020-09-10"
+        hashMapOf("USD" to 1.1876), "EUR", "2020-09-14"
     )
 
     val CURRENCY_CONVERSIONS: List<CurrencyConversionResponse> = Collections.unmodifiableList(

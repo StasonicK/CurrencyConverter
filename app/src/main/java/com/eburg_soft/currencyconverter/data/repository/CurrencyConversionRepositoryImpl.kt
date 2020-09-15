@@ -18,16 +18,14 @@ class CurrencyConversionRepositoryImpl
 
     private val currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
 
-    init {
-//        Toothpick.inject(this, Toothpick.openScope(Scopes.APP))
-    }
-
     override fun getAllCurrencyConversions(): LiveData<List<CurrencyConversionEntity>> =
         currencyConversionDao.getAllCurrencyConversions()
 
-    override fun getSizeAllCurrencyConversions(): Int {
-        return currencyConversionDao.getAllCurrencyConversions().value?.size ?: 0
-    }
+//    override fun getSizeCurrencyConversionList(): Int {
+//        val size = currencyConversionDao.getAllCurrencyConversions().value?.size?:0
+////        return currencyConversionDao.getAllCurrencyConversions().value?.size ?: 0
+//        return size
+//    }
 
     override suspend fun saveCurrencyConversion(currencyConversionEntity: CurrencyConversionEntity) {
         currencyConversionDao.insertCurrencyConversion(currencyConversionEntity)
@@ -42,6 +40,7 @@ class CurrencyConversionRepositoryImpl
             return if (result.resultType != ResultType.ERROR) {
                 result
             } else Result.error(result.error)
+
         }
     }
 }

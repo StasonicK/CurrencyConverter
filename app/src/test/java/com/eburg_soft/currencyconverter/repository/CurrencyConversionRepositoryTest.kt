@@ -1,43 +1,73 @@
 package com.eburg_soft.currencyconverter.repository
 
+import com.eburg_soft.currencyconverter.core.datatype.Result
 import com.eburg_soft.currencyconverter.data.datasource.database.CurrencyConversionDatabase
+import com.eburg_soft.currencyconverter.data.datasource.database.daos.CurrencyConversionDao
 import com.eburg_soft.currencyconverter.data.datasource.network.CurrencyConversionNetworkDataSource
 import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionRepositoryImpl
-import com.eburg_soft.currencyconverter.utils.InstantExecutorExtension
-import org.junit.Test
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.extension.*
+import com.eburg_soft.currencyconverter.utils.TestUtil
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import org.junit.*
+import org.junit.runner.*
 import org.mockito.*
+import org.mockito.Mockito.*
+import org.mockito.junit.*
+import org.robolectric.RobolectricTestRunner
 
-@ExtendWith(InstantExecutorExtension::class)
+//@ExperimentalCoroutinesApi
+@RunWith(MockitoJUnitRunner::class)
+//@RunWith(RobolectricTestRunner::class)
 class CurrencyConversionRepositoryTest {
 
     private lateinit var mockitoSession: MockitoSession
 
-    //    private lateinit var currencyConversionDao: CurrencyConversionDao
+    private lateinit var currencyConversionDao: CurrencyConversionDao
     private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
     private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
     private lateinit var currencyConversionRepositoryImpl: CurrencyConversionRepositoryImpl
 
     private fun <T> any(type: Class<T>): T = Mockito.any(type)
 
-    @BeforeEach
+    @Before
     fun initEach() {
-        mockitoSession = Mockito.mockitoSession()
+        mockitoSession = mockitoSession()
             .initMocks(this)
             .startMocking()
 
-        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
-        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
+        currencyConversionDatabase = mock(CurrencyConversionDatabase::class.java)
+//        currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
+        currencyConversionNetworkDataSource = mock(CurrencyConversionNetworkDataSource::class.java)
         currencyConversionRepositoryImpl =
             CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
     }
 
-    @AfterEach
+    @After
     fun finishEach() {
         mockitoSession.finishMocking()
     }
 
+    /*
+
+     */
+    @Test
+    @Throws(Exception::class)
+    fun exchangeCurrencyRatesEqualTypes_correctResult(): Unit = runBlocking {
+        //  Arrange
+        val currencyConversionResponse = TestUtil.CURRENCY_CONVERSION_RES_EQUAL_TYPES
+        val currencies = "USD,USD"
+        val expectedResult = Result.success(currencyConversionResponse)
+        `when`(currencyConversionRepositoryImpl.getExchangeRates(currencies)).thenReturn(expectedResult)
+
+        //  Act
+        val resultConversionResponse = currencyConversionRepositoryImpl.getExchangeRates(currencies)
+//        currencyConversionRepositoryImpl.getAllCurrencyConversions()
+
+        //  Assert
+//        Assertions.assertEquals(expectedResult, resultConversionResponse)
+        println("$expectedResult")
+        println("$resultConversionResponse")
+    }
 
 
     /*
@@ -45,19 +75,7 @@ class CurrencyConversionRepositoryTest {
      */
     @Test
     @Throws(Exception::class)
-    fun i() {
-        //  Arrange
-        val returnedData = 1
-//        Mockito.`when`()
+    fun insertRemoveCurrencies_correctResult(): Unit = runBlocking {
 
-        //  Act
-
-
-        //  Assert
-
-        //  insert
-//        val currencyConversion =
     }
-
-
 }
