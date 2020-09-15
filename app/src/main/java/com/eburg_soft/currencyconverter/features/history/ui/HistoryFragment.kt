@@ -178,5 +178,5 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    // TODO: 10.09.2020 create method removeCurrencyConverionBySwipe
+    // TODO: 10.09.2020 create method removeCurrencyConversionBySwipe
 }

@@ -98,7 +98,7 @@ dependencies {
     implementation "com.github.stephanenicolas.toothpick:smoothie-androidx:$toothpickVersion"
     kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpickVersion"
 
-    //  Logging Timber
+    //  Logging TimberKt
     implementation 'com.github.ajalt:timberkt:1.5.1'
 
     // -------- INSTRUMENTATION TESTS (use JUnit4)
