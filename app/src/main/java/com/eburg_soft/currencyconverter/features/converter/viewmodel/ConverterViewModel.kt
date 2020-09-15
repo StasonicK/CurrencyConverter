@@ -112,7 +112,7 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
             delay(300)
             isLoadingMutableLiveData.value = false
         }
-        checkHistorySize()
+//        checkHistorySize()
     }
 
     private fun onResultError(exception: Exception?) {
