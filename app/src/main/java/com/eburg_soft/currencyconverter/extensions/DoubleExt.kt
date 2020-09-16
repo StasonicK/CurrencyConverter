@@ -21,7 +21,7 @@ fun Double.round(number: Int): Double {
         roundingMode = HALF_UP
         maximumFractionDigits = number
     }
-    val result = nf.format(this).toDouble()
+    val result = nf.format(this).replace(",", "").toDouble()
     Timber.d("Rounded Double is %s", result)
     return result
 }
