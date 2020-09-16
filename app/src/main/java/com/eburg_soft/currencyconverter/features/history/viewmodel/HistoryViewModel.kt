@@ -6,10 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
-import com.eburg_soft.currencyconverter.data.di.Scopes
 import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionRepository
 import kotlinx.coroutines.launch
-import toothpick.Toothpick
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(private val currencyConversionRepository: CurrencyConversionRepository) :
@@ -47,13 +45,12 @@ class HistoryViewModel @Inject constructor(private val currencyConversionReposit
     fun removeAllHistory() {
         viewModelScope.launch {
             currencyConversionRepository.removeAllCurrenciesConversions()
-//            currencyConversionListMediatorLiveData.value = emptyList()
             currencyConversionListMediatorLiveData.postValue(emptyList())
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        Toothpick.closeScope(Scopes.HISTORY)
+//        Toothpick.closeScope(Scopes.HISTORY)
     }
 }

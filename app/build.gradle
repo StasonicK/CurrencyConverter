@@ -89,8 +89,9 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutineCallAdapterFactoryVersion"
 
     //  Navigation
-    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0'
+    def nav_version = "2.3.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //  DI Toothpick
     def toothpickVersion = '3.1.0'
@@ -113,6 +114,9 @@ dependencies {
     //  Architecture components tests
     def androidx_arch_test_version = "2.1.0"
     androidTestImplementation "androidx.arch.core:core-testing:$androidx_arch_test_version"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // Local unit tests (use JUnit5)
     // JUnit Jupiter

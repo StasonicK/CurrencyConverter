@@ -39,6 +39,4 @@ class ConverterViewModelTest {
     fun finishEach() {
         mockitoSession.finishMocking()
     }
-
-
 }

@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_history.fab
 import kotlinx.android.synthetic.main.fragment_history.pbHistory
 import kotlinx.android.synthetic.main.fragment_history.recycler_view_currency_conversions
 import timber.log.Timber
+import toothpick.Toothpick
 
 class HistoryFragment : Fragment() {
 
@@ -40,30 +41,22 @@ class HistoryFragment : Fragment() {
 
     //region ====================== Android methods ======================
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        observerLiveData()
-
-        Timber.d("onViewCreated()")
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        observerLiveData()
         setupUI()
+
 //            // handle back button
         requireActivity().onBackPressedDispatcher.addCallback(
             requireActivity(),
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     Timber.d("Activity back pressed invoked")
-                    // Do custom work here
 
                     // if you want onBackPressed() to be called as normal afterwards
                     if (isEnabled) {
                         isEnabled = false
-//                        requireActivity().onBackPressed()
                         view?.let { Navigation.findNavController(it).navigateUp() }
                     }
                 }
@@ -83,7 +76,6 @@ class HistoryFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
         saveRecyclerViewState(outState)
     }
 
@@ -96,6 +88,11 @@ class HistoryFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Toothpick.closeScope(Scopes.HISTORY)
     }
 
     //endregion
@@ -131,6 +128,7 @@ class HistoryFragment : Fragment() {
         savedInstanceState?.let {
             val lastItemPosition = it.getInt(KEY_LAST_ITEM_POSITION)
             recycler_view_currency_conversions.scrollToPosition(lastItemPosition)
+            Timber.d("$KEY_LAST_ITEM_POSITION is $lastItemPosition")
         }
     }
 

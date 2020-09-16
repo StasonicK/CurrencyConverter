@@ -24,18 +24,11 @@ import kotlinx.android.synthetic.main.fragment_converter.spFirstCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.spSecondCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.tvResultSecondCurrencyNumber
 import timber.log.Timber
+import toothpick.Toothpick
 
 class ConverterFragment : Fragment() {
 
     private lateinit var toolbar: Toolbar
-
-    companion object {
-
-        private const val SECOND_CURRENCY_TYPE = "SECOND_CURRENCY_TYPE"
-        private const val SECOND_CURRENCY_NUMBER = "SECOND_CURRENCY_NUMBER"
-        private const val FIRST_CURRENCY_TYPE = "FIRST_CURRENCY_TYPE"
-        private const val FIRST_CURRENCY_NUMBER = "FIRST_CURRENCY_NUMBER"
-    }
 
     private val viewModel: ConverterViewModel by lazy {
         injectViewModel(ConverterViewModel::class, Scopes.CONVERTER)
@@ -46,53 +39,32 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-        //  recover data
-        if (savedInstanceState != null) {
-            etFirstCurrencyNumber.setText(savedInstanceState.getString(FIRST_CURRENCY_NUMBER))
-            tvResultSecondCurrencyNumber.text = savedInstanceState.getString(SECOND_CURRENCY_NUMBER)
-            spFirstCurrencyType.setSelection(savedInstanceState.getString(FIRST_CURRENCY_TYPE)!!.toInt())
-            spSecondCurrencyType.setSelection(savedInstanceState.getString(SECOND_CURRENCY_TYPE)!!.toInt())
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        Timber.d("onActivityCreated()")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupListeners()
-        observeLiveData()
-
-
-        Timber.d("onViewCreated()")
+        Timber.d("onCreate()")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_converter, container, false)
     }
 
     override fun onStart() {
         super.onStart()
+
         setupUI()
+        setupListeners()
+        observeLiveData()
         // temporary
         showHistoryAction(true)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(FIRST_CURRENCY_NUMBER, etFirstCurrencyNumber.text.toString())
-        outState.putString(SECOND_CURRENCY_NUMBER, tvResultSecondCurrencyNumber.text.toString())
-        outState.putString(FIRST_CURRENCY_TYPE, spFirstCurrencyType.selectedItemPosition.toString())
-        outState.putString(SECOND_CURRENCY_TYPE, spSecondCurrencyType.selectedItemPosition.toString())
+    override fun onDetach() {
+        super.onDetach()
+        Timber.d("onDetach()")
+        Toothpick.closeScope(Scopes.CONVERTER)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -184,9 +156,5 @@ class ConverterFragment : Fragment() {
 
     private fun showSnackbarEmptyFirstCurrentNumber() {
         Snackbar.make(requireView(), R.string.first_currency_number_is_empty, Snackbar.LENGTH_LONG).show()
-    }
-
-    private fun showSnackbarPointedCurrenciesAreUnavailableForCurrentDate() {
-        Snackbar.make(requireView(), R.string.currencies_are_invalid_for_current_date, Snackbar.LENGTH_LONG).show()
     }
 }

@@ -6,10 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".features.MainActivity">
 
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:id="@+id/container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
@@ -21,6 +18,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph"
         tools:context=".features.MainActivity" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

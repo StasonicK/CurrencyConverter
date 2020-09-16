@@ -7,13 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eburg_soft.currencyconverter.core.datatype.ResultType
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
-import com.eburg_soft.currencyconverter.data.di.Scopes
 import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionRepository
 import com.eburg_soft.currencyconverter.data.repository.mapper.NetworkToEntityMapper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import toothpick.Toothpick
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -148,6 +146,6 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
 
     override fun onCleared() {
         super.onCleared()
-        Toothpick.closeScope(Scopes.CONVERTER)
+//        Toothpick.closeScope(Scopes.CONVERTER)
     }
 }
