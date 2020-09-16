@@ -44,16 +44,16 @@ class HistoryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        this.savedInstanceState = savedInstanceState
+
         observerLiveData()
         setupUI()
-
-//            // handle back button
+        // handle back button
         requireActivity().onBackPressedDispatcher.addCallback(
             requireActivity(),
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     Timber.d("Activity back pressed invoked")
-
                     // if you want onBackPressed() to be called as normal afterwards
                     if (isEnabled) {
                         isEnabled = false
@@ -62,7 +62,6 @@ class HistoryFragment : Fragment() {
                 }
             }
         )
-
         Timber.d("onActivityCreated()")
     }
 
@@ -75,8 +74,8 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         saveRecyclerViewState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
