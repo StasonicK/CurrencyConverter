@@ -2,7 +2,7 @@ CurrencyConverter
 ========
 
 This app is a currency converter based on free API from [Exchange Rates API][1].
-Exchange is written on Kotlin and used [Kotlin Coroutines][2]
+CurrencyConverter is written on Kotlin and used [Kotlin Coroutines][2]
 
 In app is used such libraries:
 [MVVM-pattern][3], [LiveData][4], [Room][5], [Retrofit][6], [OkHttp][7], [Gson][8], [Toothpick][9], [Navigation Architecture Component][10], [TimberKt][11];
