@@ -2,28 +2,33 @@ package com.eburg_soft.currencyconverter.features.history.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.appcompat.app.ActionBar
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.data.di.Scopes
 import com.eburg_soft.currencyconverter.extensions.injectViewModel
 import com.eburg_soft.currencyconverter.extensions.observe
-import com.eburg_soft.currencyconverter.features.MainActivity
 import com.eburg_soft.currencyconverter.features.history.ui.adapter.CurrencyConversionAdapter
 import com.eburg_soft.currencyconverter.features.history.viewmodel.HistoryViewModel
+import kotlinx.android.synthetic.main.fragment_history.fab
 import kotlinx.android.synthetic.main.fragment_history.pbHistory
 import kotlinx.android.synthetic.main.fragment_history.recycler_view_currency_conversions
 import timber.log.Timber
+import toothpick.Toothpick
 
 class HistoryFragment : Fragment() {
 
     private var savedInstanceState: Bundle? = null
-    private lateinit var currencyConversionAdapter: CurrencyConversionAdapter
+    private val currencyConversionAdapter = CurrencyConversionAdapter()
+    private lateinit var toolbar: Toolbar
 
     private val viewModel: HistoryViewModel by lazy {
         injectViewModel(HistoryViewModel::class, Scopes.HISTORY)
@@ -36,25 +41,28 @@ class HistoryFragment : Fragment() {
 
     //region ====================== Android methods ======================
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        observerLiveData()
-
-        Timber.d("ConverterFragment is onViewCreated()")
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        viewModel = injectViewModel(HistoryViewModel::class, Scopes.HISTORY)
+        this.savedInstanceState = savedInstanceState
 
-        Timber.d("ConverterFragment is onActivityCreated()")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setupToolbar()
+        observerLiveData()
+        setupUI()
+        // handle back button
+        requireActivity().onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    Timber.d("Activity back pressed invoked")
+                    // if you want onBackPressed() to be called as normal afterwards
+                    if (isEnabled) {
+                        isEnabled = false
+                        view?.let { Navigation.findNavController(it).navigateUp() }
+                    }
+                }
+            }
+        )
+        Timber.d("onActivityCreated()")
     }
 
     override fun onCreateView(
@@ -66,18 +74,47 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
         saveRecyclerViewState(outState)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            // handle navigateUp
+            android.R.id.home -> {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Toothpick.closeScope(Scopes.HISTORY)
     }
 
     //endregion
 
+    private fun setupUI() {
+        fab.setOnClickListener {
+            viewModel.removeAllHistory()
+            Navigation.findNavController(requireView()).navigate(R.id.fragment_converter)
+        }
+        toolbar = view?.findViewById(R.id.toolbarHistoryFragment)!!
+        toolbar.apply {
+            inflateMenu(R.menu.menu_item)
+            menu.removeItem(R.id.menu_action_history_fragment)
+            setNavigationIcon(R.drawable.baseline_arrow_back_white_24)
+            setNavigationOnClickListener {
+                Navigation.findNavController(requireView()).navigateUp()
+            }
+        }
+    }
+
     private fun observerLiveData() {
         observe(viewModel.currencyConversionListLiveData) { showCurrencyConversions(it) }
-//        viewModel.currencyConversionListLiveData.observe(requireActivity(), Observer(::showCurrencyConversions))
         observe(viewModel.isLoadingLiveData) { showLoading(it) }
-//        viewModel.isLoadingLiveData.observe(requireActivity(), Observer(::showLoading))
     }
 
     private fun showCurrencyConversions(currencyConversions: List<CurrencyConversionEntity>) {
@@ -90,6 +127,7 @@ class HistoryFragment : Fragment() {
         savedInstanceState?.let {
             val lastItemPosition = it.getInt(KEY_LAST_ITEM_POSITION)
             recycler_view_currency_conversions.scrollToPosition(lastItemPosition)
+            Timber.d("$KEY_LAST_ITEM_POSITION is $lastItemPosition")
         }
     }
 
@@ -97,9 +135,8 @@ class HistoryFragment : Fragment() {
         recycler_view_currency_conversions.apply {
             layoutManager = LinearLayoutManager(requireContext())
             currencyConversionAdapter.setData(currencyConversions)
-            adapter = currencyConversionAdapter.apply {
-                updateAdapter(currencyConversions)
-            }
+            currencyConversionAdapter.updateAdapter(currencyConversions)
+            adapter = currencyConversionAdapter
             setHasFixedSize(true)
         }
     }
@@ -138,14 +175,5 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private fun setupToolbar() {
-        val actionBar: ActionBar? = (activity as MainActivity).supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setDisplayShowHomeEnabled(true)
-        actionBar?.title = ""
-    }
-
-    // TODO: 10.09.2020 create method removeCurrencyConverionBySwipe
-
-    // TODO: 10.09.2020 create method removeCurrencyConverionsClicked() via floating button
+    // TODO: 10.09.2020 create method removeCurrencyConversionBySwipe
 }

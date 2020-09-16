@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".features.converter.ui.ConverterFragment">
 
+    <include
+        android:id="@+id/toolbarConverterFragment"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/spSecondCurrencyType"
@@ -23,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_big"
         android:hint="@string/_1_00"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:singleLine="true"
         android:textSize="@dimen/text_size_standard"
         app:layout_constraintBottom_toBottomOf="@+id/tvFirstCurrencyNumberDescription"
@@ -46,17 +54,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_very_large"
         android:layout_marginTop="@dimen/margin_very_large"
-        android:text="@string/first_currentcy_number"
+        android:text="@string/first_currency_number"
         android:textSize="@dimen/text_size_standard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarConverterFragment" />
 
     <TextView
         android:id="@+id/tvFirstCurrencyTypeDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_very_large"
-        android:text="@string/first_currentcy_type"
+        android:text="@string/first_currency_type"
         android:textSize="@dimen/text_size_standard"
         app:layout_constraintEnd_toEndOf="@+id/tvFirstCurrencyNumberDescription"
         app:layout_constraintTop_toBottomOf="@+id/tvFirstCurrencyNumberDescription" />
@@ -66,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="@string/second_currentcy_type"
+        android:text="@string/second_currency_type"
         android:textSize="@dimen/text_size_standard"
         app:layout_constraintEnd_toEndOf="@+id/tvFirstCurrencyTypeDescription"
         app:layout_constraintTop_toBottomOf="@+id/tvFirstCurrencyTypeDescription" />

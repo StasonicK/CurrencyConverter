@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.R.layout
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,22 +18,17 @@ class MainActivity : AppCompatActivity() {
 
         initController()
 
-        Timber.d("MainActivity is created")
+        Timber.d("onCreate()")
     }
 
     private fun initController() {
-//        navController = supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = Navigation.findNavController(this, R.id.container)
-        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
+    override fun onSupportNavigateUp(): Boolean = navController?.navigateUp() ?: false
 
-//    override fun onBackPressed() {
-//        val fragmentManager = supportFragmentManager
-//        fragmentManager.findFragmentById(R.id.container)
-//        if (fragmentManager.backStackEntryCount > 1) {
-//            fragmentManager.popBackStack()
-//        } else finish()
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.menu_item, menu)
+//        return super.onCreateOptionsMenu(menu)
 //    }
 }

@@ -9,7 +9,7 @@ private const val DATABASE_NAME = "currency_conversions.db"
 
 class DatabaseModule(applicationContext: Context) : Module() {
     init {
-        bind(CurrencyConversionDatabase::class.java).to(createDatabase(applicationContext)::class.java).singleton()
+        bind(CurrencyConversionDatabase::class.java).toInstance(createDatabase(applicationContext))
     }
 
     private fun createDatabase(applicationContext: Context): CurrencyConversionDatabase {
@@ -17,6 +17,8 @@ class DatabaseModule(applicationContext: Context) : Module() {
             applicationContext,
             CurrencyConversionDatabase::class.java,
             DATABASE_NAME
-        ).build()
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 }

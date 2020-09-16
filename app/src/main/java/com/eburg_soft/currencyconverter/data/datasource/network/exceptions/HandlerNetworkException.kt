@@ -14,9 +14,11 @@ fun handleNetworkExceptions(ex: Exception): Exception {
 }
 
 private fun apiErrorFromCodeException(code: Int): Exception {
-    return if (code == 400) {
-        BadRequestException()
-    } else {
-        GenericNetworkException()
+    return when (code) {
+        400 -> BadRequestException()
+
+        else ->
+            GenericNetworkException()
     }
 }
+

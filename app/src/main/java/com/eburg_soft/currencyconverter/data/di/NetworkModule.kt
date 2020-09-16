@@ -15,8 +15,7 @@ private const val BASE_URL = "https://api.exchangeratesapi.io/"
 class NetworkModule : Module() {
     init {
         bind(CurrenciesApi::class.java)
-            .to(currencyApi()::class.java)
-            .singleton()
+            .toInstance(currencyApi())
     }
 
     private fun currencyApi(): CurrenciesApi = retrofitInstance().create(CurrenciesApi::class.java)

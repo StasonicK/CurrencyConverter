@@ -11,7 +11,11 @@
         tools:layout="@layout/fragment_converter">
         <action
             android:id="@+id/open_history_fragment"
-            app:destination="@id/fragment_history_fragment" />
+            app:destination="@id/fragment_history_fragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_out_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 

@@ -9,37 +9,30 @@ import com.eburg_soft.currencyconverter.data.datasource.network.CurrencyConversi
 import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyConversionResponse
 import javax.inject.Inject
 
-class CurrencyConversionRepositoryImpl @Inject constructor(
-//    private val currencyConversionDao: CurrencyConversionDao,
+class CurrencyConversionRepositoryImpl
+@Inject constructor(
     private val currencyConversionDatabase: CurrencyConversionDatabase,
     private val currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
 ) :
     CurrencyConversionRepository {
 
     private val currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
-//    @Inject
-//    private lateinit var currencyConversionDao: CurrencyConversionDao
-//
-//    @Inject
-//    private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
-
-    init {
-//        Toothpick.inject(this, Toothpick.openScope(Scopes.APP))
-    }
 
     override fun getAllCurrencyConversions(): LiveData<List<CurrencyConversionEntity>> =
         currencyConversionDao.getAllCurrencyConversions()
 
-    override fun getSizeAllCurrencyConversions(): Int {
-        return currencyConversionDao.getAllCurrencyConversions().value?.size ?: 0
-    }
+//    override fun getSizeCurrencyConversionList(): Int {
+//        val size = currencyConversionDao.getAllCurrencyConversions().value?.size?:0
+////        return currencyConversionDao.getAllCurrencyConversions().value?.size ?: 0
+//        return size
+//    }
 
     override suspend fun saveCurrencyConversion(currencyConversionEntity: CurrencyConversionEntity) {
         currencyConversionDao.insertCurrencyConversion(currencyConversionEntity)
     }
 
     override suspend fun removeAllCurrenciesConversions() {
-        currencyConversionDao.deleteCurrencyConversions()
+        currencyConversionDao.deleteAllCurrencyConversions()
     }
 
     override suspend fun getExchangeRates(currencies: String): Result<CurrencyConversionResponse> {
@@ -47,6 +40,7 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
             return if (result.resultType != ResultType.ERROR) {
                 result
             } else Result.error(result.error)
+
         }
     }
 }

@@ -5,7 +5,9 @@ import androidx.test.core.app.ApplicationProvider
 import com.eburg_soft.currencyconverter.data.datasource.database.daos.CurrencyConversionDao
 import org.junit.*
 
-abstract class CurrencyConversionEntityRepositoryDatabaseTest {
+//@SmallTest
+//@RunWith(AndroidJUnit4::class)
+abstract class CurrencyConversionDatabaseTest {
 
     private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
 

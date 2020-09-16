@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.data.di.Scopes
 import com.eburg_soft.currencyconverter.extensions.injectViewModel
 import com.eburg_soft.currencyconverter.extensions.observe
 import com.eburg_soft.currencyconverter.features.converter.viewmodel.ConverterViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_converter.btnClear
 import kotlinx.android.synthetic.main.fragment_converter.btnCount
 import kotlinx.android.synthetic.main.fragment_converter.etFirstCurrencyNumber
@@ -24,19 +24,11 @@ import kotlinx.android.synthetic.main.fragment_converter.spFirstCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.spSecondCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.tvResultSecondCurrencyNumber
 import timber.log.Timber
+import toothpick.Toothpick
 
 class ConverterFragment : Fragment() {
 
-    private lateinit var menu: Menu
-    private lateinit var navController: NavController
-
-    companion object {
-
-        private const val SECOND_CURRENCY_TYPE = "SECOND_CURRENCY_TYPE"
-        private const val SECOND_CURRENCY_NUMBER = "SECOND_CURRENCY_NUMBER"
-        private const val FIRST_CURRENCY_TYPE = "FIRST_CURRENCY_TYPE"
-        private const val FIRST_CURRENCY_NUMBER = "FIRST_CURRENCY_NUMBER"
-    }
+    private lateinit var toolbar: Toolbar
 
     private val viewModel: ConverterViewModel by lazy {
         injectViewModel(ConverterViewModel::class, Scopes.CONVERTER)
@@ -47,56 +39,32 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-        //  recover data
-        if (savedInstanceState != null) {
-            etFirstCurrencyNumber.setText(savedInstanceState.getString(FIRST_CURRENCY_NUMBER))
-            tvResultSecondCurrencyNumber.text = savedInstanceState.getString(SECOND_CURRENCY_NUMBER)
-            spFirstCurrencyType.setSelection(savedInstanceState.getString(FIRST_CURRENCY_TYPE)!!.toInt())
-            spSecondCurrencyType.setSelection(savedInstanceState.getString(SECOND_CURRENCY_TYPE)!!.toInt())
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        observeLiveData()
-
-        Timber.d("ConverterFragment is onActivityCreated()")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setNevController(view)
-        setupListeners()
-
-        Timber.d("ConverterFragment is onViewCreated()")
+        Timber.d("onCreate()")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_converter, container, false)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(FIRST_CURRENCY_NUMBER, etFirstCurrencyNumber.text.toString())
-        outState.putString(SECOND_CURRENCY_NUMBER, tvResultSecondCurrencyNumber.text.toString())
-        outState.putString(FIRST_CURRENCY_TYPE, spFirstCurrencyType.selectedItemPosition.toString())
-        outState.putString(SECOND_CURRENCY_TYPE, spSecondCurrencyType.selectedItemPosition.toString())
+    override fun onStart() {
+        super.onStart()
+
+        setupUI()
+        setupListeners()
+        observeLiveData()
+        // temporary
+        showHistoryAction(true)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_action_history_fragment -> {
-                navController.navigate(R.id.open_history_fragment)
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onDetach() {
+        super.onDetach()
+        Timber.d("onDetach()")
+        Toothpick.closeScope(Scopes.CONVERTER)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -107,42 +75,55 @@ class ConverterFragment : Fragment() {
 
     //endregion
 
-    private fun setNevController(view: View) {
-        navController = Navigation.findNavController(view)
+    private fun setupUI() {
+        toolbar = activity?.findViewById(R.id.toolbarConverterFragment)!!
+        toolbar.apply {
+            inflateMenu(R.menu.menu_item)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.menu_action_history_fragment -> {
+                        Navigation.findNavController(requireView())
+                            .navigate(R.id.fragment_history_fragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
     }
 
     private fun setupListeners() {
         btnClear.setOnClickListener {
-            etFirstCurrencyNumber.setText(R.string.default_currency_number)
+            etFirstCurrencyNumber.setText("")
             spFirstCurrencyType.setSelection(0)
-            tvResultSecondCurrencyNumber.setText(R.string.default_currency_number)
+            tvResultSecondCurrencyNumber.text = ""
             spSecondCurrencyType.setSelection(0)
         }
         btnCount.setOnClickListener {
-            viewModel.saveCurrencyConversion(
-                etFirstCurrencyNumber.text.toString(),
-                spFirstCurrencyType.selectedItem.toString(),
-                spSecondCurrencyType.selectedItem.toString()
-            )
+            if (etFirstCurrencyNumber.text.isNullOrEmpty()) {
+                showSnackbarEmptyFirstCurrentNumber()
+            } else
+                viewModel.saveCurrencyConversion(
+                    etFirstCurrencyNumber.text.toString(),
+                    spFirstCurrencyType.selectedItem.toString(),
+                    spSecondCurrencyType.selectedItem.toString()
+                )
         }
     }
 
     private fun observeLiveData() {
         observe(viewModel.secondCurrenciesNumberLiveData) { setSecondCurrencyNumber(it) }
-//        viewModel.secondCurrenciesNumberLiveData.observe(requireActivity(), Observer(::setSecondCurrencyNumber))
         observe(viewModel.isLoadingLiveData) { showLoading(it) }
-//        viewModel.isLoadingLiveData.observe(requireActivity(), Observer(::showLoading))
-        observe(viewModel.isErrorOnLoadingLiveData) { onErrorReceived() }
-//        viewModel.isErrorOnLoadingLiveData.observe(requireActivity(), { onErrorReceived() })
-        observe(viewModel.isExistingHistorySizeLiveData) { showHistoryAction(it) }
-//        viewModel.isExistingHistorySizeLiveData.observe(requireActivity(), Observer(::showHistoryAction))
+        observe(viewModel.errorOnLoadingLiveData) { onErrorReceived(it) }
+//        observe(viewModel.isExistingHistoryLiveData) { showHistoryAction(it) }
     }
 
-    private fun onErrorReceived() {
+    private fun onErrorReceived(message: String) {
         AlertDialog.Builder(requireActivity())
             .setTitle(R.string.network_connection_error_title)
+            .setMessage(message)
             .setCancelable(true)
-            .setNegativeButton(R.string.network_connection_error_cancel) { _, _ -> requireActivity().finish() }
+            .setNegativeButton(R.string.network_connection_error_cancel) { dialog, _ -> dialog.cancel() }
             .setPositiveButton(R.string.network_connection_error_action) { _, _ ->
                 viewModel.saveCurrencyConversion(
                     etFirstCurrencyNumber.text.toString(),
@@ -164,9 +145,16 @@ class ConverterFragment : Fragment() {
     }
 
     private fun showHistoryAction(isShowing: Boolean) {
-        menu.findItem(R.id.menu_action_history_fragment).apply {
-            isVisible = isShowing
-            isEnabled = isShowing
+        toolbar.menu?.let {
+            it.findItem(R.id.menu_action_history_fragment).apply {
+                isVisible = isShowing
+                isEnabled = isShowing
+            }
         }
+        Timber.d("showHistoryAction()")
+    }
+
+    private fun showSnackbarEmptyFirstCurrentNumber() {
+        Snackbar.make(requireView(), R.string.first_currency_number_is_empty, Snackbar.LENGTH_LONG).show()
     }
 }
