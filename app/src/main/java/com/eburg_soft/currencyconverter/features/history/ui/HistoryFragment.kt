@@ -89,11 +89,6 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Toothpick.closeScope(Scopes.HISTORY)
-    }
-
     //endregion
 
     private fun setupUI() {

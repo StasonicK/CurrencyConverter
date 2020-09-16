@@ -61,12 +61,6 @@ class ConverterFragment : Fragment() {
         showHistoryAction(true)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Timber.d("onDetach()")
-        Toothpick.closeScope(Scopes.CONVERTER)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
