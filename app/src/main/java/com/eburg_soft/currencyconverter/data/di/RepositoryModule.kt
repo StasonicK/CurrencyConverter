@@ -9,6 +9,5 @@ class RepositoryModule : Module() {
     init {
         bind(CurrencyConversionRepository::class.java)
             .to(CurrencyConversionRepositoryImpl::class.java)
-//            .singleton()
     }
 }

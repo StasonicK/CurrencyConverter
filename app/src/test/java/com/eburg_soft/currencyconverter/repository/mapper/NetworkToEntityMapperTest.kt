@@ -2,9 +2,14 @@ package com.eburg_soft.currencyconverter.repository.mapper
 
 import com.eburg_soft.currencyconverter.data.repository.mapper.NetworkToEntityMapper
 import com.eburg_soft.currencyconverter.utils.TestUtil
+import io.mockk.*
+import org.junit.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
 
 class NetworkToEntityMapperTest {
+
+    private val mapper: NetworkToEntityMapper = NetworkToEntityMapper()
 
     /*
         Different currency types
@@ -18,14 +23,10 @@ class NetworkToEntityMapperTest {
         val firstCurrencyNumber = 1.00
         val currencyConversionResponse = TestUtil.CURRENCY_CONVERSION_RES_ONE
         val expectedEntity = TestUtil.CURRENCY_CONVERSION_ONE
-//        `when`(NetworkToEntityMapper.map(any(CurrencyConversionResponse::class.java))).thenReturn(
-//            currencyConversionEntity
-//        )
 
         // Act
-        val networkToEntityMapper = NetworkToEntityMapper()
-        networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber)
-        val resultEntity = networkToEntityMapper.map(currencyConversionResponse)
+        mapper.setFirstCurrencyNumber(firstCurrencyNumber)
+        val resultEntity = mapper.map(currencyConversionResponse)
 
         // Assert
         println("expected entity: $expectedEntity")
@@ -46,14 +47,10 @@ class NetworkToEntityMapperTest {
         val firstCurrencyNumber = 1.00
         val currencyConversionResponse = TestUtil.CURRENCY_CONVERSION_RES_EQUAL_TYPES
         val expectedEntity = TestUtil.CURRENCY_CONVERSION_EQUAL_TYPES
-//        `when`(NetworkToEntityMapper.map(any(CurrencyConversionResponse::class.java))).thenReturn(
-//            currencyConversionEntity
-//        )
 
         // Act
-        val networkToEntityMapper = NetworkToEntityMapper()
-        networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber)
-        val resultEntity = networkToEntityMapper.map(currencyConversionResponse)
+        mapper.setFirstCurrencyNumber(firstCurrencyNumber)
+        val resultEntity = mapper.map(currencyConversionResponse)
 
         // Assert
         println("expected entity: $expectedEntity")

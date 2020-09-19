@@ -1,42 +1,102 @@
 package com.eburg_soft.currencyconverter.features.viewmodels
 
-import com.eburg_soft.currencyconverter.data.datasource.database.CurrencyConversionDatabase
-import com.eburg_soft.currencyconverter.data.datasource.database.daos.CurrencyConversionDao
-import com.eburg_soft.currencyconverter.data.datasource.network.CurrencyConversionNetworkDataSource
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.eburg_soft.currencyconverter.core.datatype.Result
 import com.eburg_soft.currencyconverter.data.repository.CurrencyConversionRepositoryImpl
-import org.junit.jupiter.api.*
-import org.mockito.*
+import com.eburg_soft.currencyconverter.data.repository.mapper.NetworkToEntityMapper
+import com.eburg_soft.currencyconverter.features.converter.viewmodel.ConverterViewModel
+import com.eburg_soft.currencyconverter.utils.CoroutineTestRule
+import com.eburg_soft.currencyconverter.utils.TestUtil
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.*
 
+@ExperimentalCoroutinesApi
 class ConverterViewModelTest {
 
-    private lateinit var mockitoSession: MockitoSession
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var currencyConversionDao: CurrencyConversionDao
-    private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
-    private lateinit var currencyConversionNetworkDataSource: CurrencyConversionNetworkDataSource
-    private lateinit var currencyConversionRepositoryImpl: CurrencyConversionRepositoryImpl
+    @get:Rule
+    val coroutineTestRule = CoroutineTestRule()
 
-    private fun <T> any(type: Class<T>): T = Mockito.any(type)
+    private lateinit var viewModel: ConverterViewModel
 
-    @BeforeEach
-//    @Before
-    fun initEach() {
-        mockitoSession = Mockito.mockitoSession()
-            .initMocks(this)
-            .startMocking()
+    @MockK
+    private lateinit var repository: CurrencyConversionRepositoryImpl
 
-//        currencyConversionDatabase = mock()
-        currencyConversionDatabase = Mockito.mock(CurrencyConversionDatabase::class.java)
-        currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
-//        currencyConversionNetworkDataSource = mock()
-        currencyConversionNetworkDataSource = Mockito.mock(CurrencyConversionNetworkDataSource::class.java)
-        currencyConversionRepositoryImpl =
-            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currencyConversionNetworkDataSource)
+    @MockK
+    private lateinit var mapper: NetworkToEntityMapper
+
+    @Before
+    fun init() {
+        MockKAnnotations.init(this)
+        viewModel = ConverterViewModel(repository)
     }
 
-    @AfterEach
-//    @After
-    fun finishEach() {
-        mockitoSession.finishMocking()
+    @After
+    fun finish() {
+        unmockkAll()
+    }
+
+    /*
+        save conversion of two same types
+     */
+    @Test
+    @Throws(Exception::class)
+    fun saveCurrencyConversionSameTypes() = coroutineTestRule.runBlockingTest {
+        //    Arrange
+        val firstCurrencyNumber = "1"
+        val firstCurrenciesType = "USD"
+        val secondCurrenciesType = "USD"
+        coEvery {
+            repository.saveCurrencyConversion(any())
+        } just Runs
+
+        //  Act
+        viewModel.saveCurrencyConversion(firstCurrencyNumber, firstCurrenciesType, secondCurrenciesType)
+
+        //  Assert
+        coVerify(exactly = 1) { repository.saveCurrencyConversion(any()) }
+    }
+
+    /*
+        save conversion of two different types
+     */
+    @ExperimentalCoroutinesApi
+    @Test
+    @Throws(Exception::class)
+    fun saveCurrencyConversionDifferentTypes() = coroutineTestRule.runBlockingTest {
+        //    Arrange
+        val firstCurrencyNumber = "1"
+        val firstCurrenciesType = "USD"
+        val secondCurrenciesType = "CAD"
+        val currencies = "$firstCurrenciesType,$secondCurrenciesType"
+        val response = TestUtil.CURRENCY_CONVERSION_RES_ONE
+        val entity = TestUtil.CURRENCY_CONVERSION_ONE
+        val result = Result.success(response)
+        coEvery {
+            mapper.setFirstCurrencyNumber(any())
+        } just Runs
+        coEvery {
+            repository.getExchangeRates(any())
+        } returns result
+        coEvery {
+            mapper.map(any())
+        } returns entity
+        coEvery {
+            repository.saveCurrencyConversion(any())
+        } just Runs
+
+        //  Act
+        viewModel.saveCurrencyConversion(firstCurrencyNumber, firstCurrenciesType, secondCurrenciesType)
+
+        //  Assert
+//        coVerify(exactly = 1) { mapper.setFirstCurrencyNumber(any()) }
+        coVerify(exactly = 1) { repository.getExchangeRates(any()) }
+//        coVerify(exactly = 1) { mapper.map(any()) }
+        coVerify(exactly = 1) { repository.saveCurrencyConversion(any()) }
     }
 }
