@@ -1,15 +1,20 @@
 package com.eburg_soft.currencyconverter.data.datasource.database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.utils.LiveDataTestUtil
 import com.eburg_soft.currencyconverter.utils.TestUtil
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.*
+import org.junit.runner.*
 import kotlin.system.measureTimeMillis
 
-//@SmallTest
-//@RunWith(AndroidJUnit4::class)
+@SmallTest
+@ExperimentalCoroutinesApi
+@RunWith(AndroidJUnit4::class)
 class CurrencyConversionDaoTest : CurrencyConversionDatabaseTest() {
 
     @Rule

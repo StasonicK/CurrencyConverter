@@ -85,7 +85,7 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
 
             if (firstCurrenciesType != secondCurrenciesType) {
                 val networkToEntityMapper = NetworkToEntityMapper()
-                networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber = firstCurrencyNumber.toDouble())
+                networkToEntityMapper.setFirstCurrencyNumber(firstCurrencyNumber.toDouble())
                 val currencies = "$firstCurrenciesType,$secondCurrenciesType"
 
                 val currencyConversionResult = currencyConversionRepository.getExchangeRates(currencies)

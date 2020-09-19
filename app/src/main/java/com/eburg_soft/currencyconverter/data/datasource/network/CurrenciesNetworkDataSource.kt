@@ -6,7 +6,7 @@ import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyC
 import timber.log.Timber
 import javax.inject.Inject
 
-class CurrencyConversionNetworkDataSource @Inject constructor(private val currenciesApi: CurrenciesApi) {
+class CurrenciesNetworkDataSource @Inject constructor(private val currenciesApi: CurrenciesApi) {
 
     suspend fun getExchangeRates(currencies: String): Result<CurrencyConversionResponse> {
         return try {
