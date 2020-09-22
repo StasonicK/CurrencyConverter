@@ -108,7 +108,6 @@ class HistoryFragment : Fragment() {
                 Navigation.findNavController(requireView()).navigateUp()
             }
         }
-
     }
 
     private fun observerLiveData() {
@@ -144,15 +143,18 @@ class HistoryFragment : Fragment() {
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
-                Toast.makeText(requireActivity(), "on Move", Toast.LENGTH_SHORT).show()
                 return false
             }
 
             override fun onSwiped(viewHolder: ViewHolder, swipeDir: Int) {
-                Toast.makeText(requireActivity(), "Currency conversion deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), R.string.currency_conversion_deleted, Toast.LENGTH_SHORT).show()
                 val position = viewHolder.adapterPosition
                 viewModel.remove(currencyConversionAdapter.getCurrencyConversionAt(position))
-                currencyConversionAdapter.notifyDataSetChanged()
+                currencyConversionAdapter.removeCurrencyConversion(position)
+//                currencyConversionAdapter.notifyItemRemoved(position)
+//                val count = currencyConversionAdapter.itemCount - position
+//                currencyConversionAdapter.notifyItemRangeChanged(position, count)
+//                currencyConversionAdapter.notifyDataSetChanged()
             }
         }).attachToRecyclerView(recycler_view_currency_conversions)
     }
