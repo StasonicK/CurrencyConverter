@@ -6,7 +6,7 @@ CurrencyConverter is written on Kotlin and used [Kotlin Coroutines][2]
 
 In app is used such libraries:
 [MVVM-pattern][3], [LiveData][4], [Room][5], [Retrofit][6], [OkHttp][7], [Gson][8], [Toothpick][9], [Navigation Architecture Component][10], [TimberKt][11];
-and libraries for unit-tests: [Mockito][12], [JUnit5][13], [Robolectric][14]
+and libraries for unit-tests: [MockK][12], [JUnit5][13], [Espresso][14]
 
 
 Author
@@ -28,7 +28,7 @@ MIT. See the [LICENSE][15] file for details.
 [9]: https://github.com/stephanenicolas/toothpick
 [10]: https://developer.android.com/guide/navigation/navigation-getting-started
 [11]: https://github.com/ajalt/timberkt
-[12]: https://site.mockito.org/
+[12]: https://mockk.io
 [13]: https://junit.org/junit5/docs/current/user-guide/
-[14]: http://robolectric.org/
+[14]: https://developer.android.com/training/testing/espresso
 [15]: https://github.com/StasonicK/CurrencyConverter/blob/feature/unit_tests/LICENSE
