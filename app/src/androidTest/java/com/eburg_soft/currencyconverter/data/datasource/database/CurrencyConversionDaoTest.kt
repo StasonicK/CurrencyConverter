@@ -17,6 +17,8 @@ import kotlin.system.measureTimeMillis
 @RunWith(AndroidJUnit4::class)
 class CurrencyConversionDaoTest : CurrencyConversionDatabaseTest() {
 
+    //  test from 26 API
+
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
