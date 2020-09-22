@@ -6,11 +6,15 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eburg_soft.currencyconverter.R
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.data.di.Scopes
@@ -133,6 +137,26 @@ class HistoryFragment : Fragment() {
             adapter = currencyConversionAdapter
             setHasFixedSize(true)
         }
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: ViewHolder, swipeDir: Int) {
+                Toast.makeText(requireActivity(), R.string.currency_conversion_deleted, Toast.LENGTH_SHORT).show()
+                val position = viewHolder.adapterPosition
+                viewModel.remove(currencyConversionAdapter.getCurrencyConversionAt(position))
+                currencyConversionAdapter.removeCurrencyConversion(position)
+//                currencyConversionAdapter.notifyItemRemoved(position)
+//                val count = currencyConversionAdapter.itemCount - position
+//                currencyConversionAdapter.notifyItemRangeChanged(position, count)
+//                currencyConversionAdapter.notifyDataSetChanged()
+            }
+        }).attachToRecyclerView(recycler_view_currency_conversions)
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -168,6 +192,4 @@ class HistoryFragment : Fragment() {
             }
         }
     }
-
-    // TODO: 10.09.2020 create method removeCurrencyConversionBySwipe
 }

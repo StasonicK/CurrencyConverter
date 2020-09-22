@@ -15,6 +15,7 @@
     <string name="history_fragment">History fragment</string>
     <string name="first_currency_number_is_empty">field \"First currency number\" is empty!</string>
     <string name="currencies_are_invalid_for_current_date">currencies are invalid for current date!</string>
+    <string name="currency_conversion_deleted">Currency conversion deleted</string>
 
     <string-array name="currencyTypes">
         <item>USD</item>

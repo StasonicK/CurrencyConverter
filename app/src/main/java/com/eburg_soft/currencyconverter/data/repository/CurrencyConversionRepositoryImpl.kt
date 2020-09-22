@@ -29,6 +29,10 @@ class CurrencyConversionRepositoryImpl
         currencyConversionDao.deleteAllCurrencyConversions()
     }
 
+    override suspend fun remove(item: CurrencyConversionEntity) {
+        currencyConversionDao.deleteCurrencyConversion(item)
+    }
+
     override suspend fun getExchangeRates(currencies: String): Result<CurrencyConversionResponse> {
         currenciesNetworkDataSource.getExchangeRates(currencies).let { result ->
             return if (result.resultType != ResultType.ERROR) {

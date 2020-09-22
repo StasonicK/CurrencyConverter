@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.item_list_currency_conversion.view.tvSecon
 
 class CurrencyConversionAdapter : RecyclerView.Adapter<CurrencyConversionHolder>() {
 
-    private lateinit var currencyConversions: List<CurrencyConversionEntity>
+    private var currencyConversions: ArrayList<CurrencyConversionEntity> = arrayListOf()
 
     class CurrencyConversionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -46,14 +46,21 @@ class CurrencyConversionAdapter : RecyclerView.Adapter<CurrencyConversionHolder>
 
     override fun getItemCount(): Int = currencyConversions.size
 
+    fun getCurrencyConversionAt(position: Int): CurrencyConversionEntity = currencyConversions[position]
+
+    fun removeCurrencyConversion(position: Int) {
+        currencyConversions.removeAt(position)
+        this.notifyItemRemoved(position)
+    }
+
     fun updateAdapter(updatedList: List<CurrencyConversionEntity>) {
         val result = DiffUtil.calculateDiff(CurrencyConversionsDiffCallback(currencyConversions, updatedList))
-        this.currencyConversions = updatedList.toMutableList()
+        this.currencyConversions.addAll(updatedList)
         result.dispatchUpdatesTo(this)
     }
 
     fun setData(currencyConversions: List<CurrencyConversionEntity>) {
-        this.currencyConversions = currencyConversions
+        this.currencyConversions.addAll(currencyConversions)
     }
 }
 
