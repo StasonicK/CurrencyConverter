@@ -8,7 +8,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 object CurrenciesApiService {
 
     fun currencyApi(baseUrl: String): CurrenciesApi = retrofitInstance(baseUrl).create(CurrenciesApi::class.java)

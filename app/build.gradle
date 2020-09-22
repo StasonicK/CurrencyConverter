@@ -174,7 +174,6 @@ dependencies {
     //  tests for Toothpick
     testImplementation "com.github.stephanenicolas.toothpick:toothpick-testing-junit5:$toothpick_version"
 
-
     //  MockK tests
     def mockk_version = '1.10.0'
     testImplementation "io.mockk:mockk:$mockk_version"

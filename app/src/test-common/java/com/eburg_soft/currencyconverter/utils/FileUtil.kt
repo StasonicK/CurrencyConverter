@@ -13,7 +13,8 @@ object FileUtil {
 
     fun getJsonFromAssets(
 //        context: Context,
-        fileName: String?): String? {
+        fileName: String?
+    ): String? {
         val jsonString: String
         jsonString = try {
             val context = ApplicationProvider.getApplicationContext<Context>()

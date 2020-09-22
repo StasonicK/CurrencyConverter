@@ -35,7 +35,7 @@ class CurrencyConversionRepositoryTest {
     @get:Rule
     val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
 
-        @MockK
+    @MockK
     private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
 
     //@SpyK

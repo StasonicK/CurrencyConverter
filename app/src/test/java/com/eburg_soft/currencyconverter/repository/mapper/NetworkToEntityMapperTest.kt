@@ -2,10 +2,7 @@ package com.eburg_soft.currencyconverter.repository.mapper
 
 import com.eburg_soft.currencyconverter.data.repository.mapper.NetworkToEntityMapper
 import com.eburg_soft.currencyconverter.utils.TestUtil
-import io.mockk.*
-import org.junit.*
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Test
 
 class NetworkToEntityMapperTest {
 

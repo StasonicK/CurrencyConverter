@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_converter.spFirstCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.spSecondCurrencyType
 import kotlinx.android.synthetic.main.fragment_converter.tvResultSecondCurrencyNumber
 import timber.log.Timber
-import toothpick.Toothpick
 
 class ConverterFragment : Fragment() {
 

@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_history.fab
 import kotlinx.android.synthetic.main.fragment_history.pbHistory
 import kotlinx.android.synthetic.main.fragment_history.recycler_view_currency_conversions
 import timber.log.Timber
-import toothpick.Toothpick
 
 class HistoryFragment : Fragment() {
 

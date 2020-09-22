@@ -2,7 +2,6 @@ package com.eburg_soft.currencyconverter.utils
 
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.data.datasource.network.models.CurrencyConversionResponse
-import java.util.Collections
 
 object TestUtil {
 
