@@ -183,9 +183,6 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
-    //  Kaspresso test
-    androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.2.0'
-
     def espresso_version = '3.3.0'
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"

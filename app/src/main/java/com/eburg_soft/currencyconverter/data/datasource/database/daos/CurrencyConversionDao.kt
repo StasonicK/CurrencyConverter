@@ -22,4 +22,7 @@ interface CurrencyConversionDao {
 
     @Query("SELECT * FROM ${CurrencyConversionEntity.TABLE_NAME}")
     fun getAllCurrencyConversions(): LiveData<List<CurrencyConversionEntity>>
+
+    @Query("SELECT * FROM ${CurrencyConversionEntity.TABLE_NAME}")
+    fun getAllCurrencyConversion(currencyConversionEntity: CurrencyConversionEntity): LiveData<CurrencyConversionEntity>
 }

@@ -42,7 +42,11 @@ class HistoryViewModel @Inject constructor(private val currencyConversionReposit
         isLoadingMutableLiveData.value = false
     }
 
-    // TODO: 10.09.2020 create method removeCurrencyConverion(item:Int)
+    fun remove(item: CurrencyConversionEntity) {
+        viewModelScope.launch {
+            currencyConversionRepository.remove(item)
+        }
+    }
 
     fun removeAllHistory() {
         viewModelScope.launch {

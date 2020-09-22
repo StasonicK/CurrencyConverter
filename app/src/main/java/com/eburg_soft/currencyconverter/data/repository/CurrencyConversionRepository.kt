@@ -13,5 +13,7 @@ interface CurrencyConversionRepository {
 
     suspend fun removeAllCurrenciesConversions()
 
+    suspend fun remove(item: CurrencyConversionEntity)
+
     suspend fun getExchangeRates(currencies: String): Result<CurrencyConversionResponse>
 }

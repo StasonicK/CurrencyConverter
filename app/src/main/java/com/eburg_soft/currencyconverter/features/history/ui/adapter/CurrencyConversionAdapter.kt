@@ -46,6 +46,8 @@ class CurrencyConversionAdapter : RecyclerView.Adapter<CurrencyConversionHolder>
 
     override fun getItemCount(): Int = currencyConversions.size
 
+    fun getCurrencyConversionAt(position: Int):CurrencyConversionEntity = currencyConversions[position]
+
     fun updateAdapter(updatedList: List<CurrencyConversionEntity>) {
         val result = DiffUtil.calculateDiff(CurrencyConversionsDiffCallback(currencyConversions, updatedList))
         this.currencyConversions = updatedList.toMutableList()
