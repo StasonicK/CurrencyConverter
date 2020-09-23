@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.eburg_soft.currencyconverter.core.datatype.Result
 import com.eburg_soft.currencyconverter.core.datatype.ResultType.SUCCESS
-import com.eburg_soft.currencyconverter.data.datasource.database.CurrencyConversionDatabase
 import com.eburg_soft.currencyconverter.data.datasource.database.daos.CurrencyConversionDao
 import com.eburg_soft.currencyconverter.data.datasource.database.models.CurrencyConversionEntity
 import com.eburg_soft.currencyconverter.data.datasource.network.CurrenciesNetworkDataSource
@@ -27,7 +26,6 @@ import java.util.Collections
 @ExtendWith(MockKExtension::class)
 @ExperimentalCoroutinesApi
 class CurrencyConversionRepositoryTest {
-    // TODO: 19.09.2020 fix class
 
     @get:Rule
     val instantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
@@ -36,12 +34,7 @@ class CurrencyConversionRepositoryTest {
     val coroutineTestRule: CoroutineTestRule = CoroutineTestRule()
 
     @MockK
-    private lateinit var currencyConversionDatabase: CurrencyConversionDatabase
-
-    //@SpyK
-    //@MockK
-//    private lateinit var currencyConversionDao: CurrencyConversionDao
-    private val currencyConversionDao = mockk<CurrencyConversionDao>(relaxUnitFun = true)
+    private lateinit var currencyConversionDao: CurrencyConversionDao
 
     @MockK
     private lateinit var currenciesNetworkDataSource: CurrenciesNetworkDataSource
@@ -52,8 +45,7 @@ class CurrencyConversionRepositoryTest {
     fun init() {
         MockKAnnotations.init(this)
         currencyConversionRepositoryImpl =
-            CurrencyConversionRepositoryImpl(currencyConversionDatabase, currenciesNetworkDataSource)
-//        currencyConversionDao = currencyConversionDatabase.currencyConversationDao()
+            CurrencyConversionRepositoryImpl(currencyConversionDao, currenciesNetworkDataSource)
     }
 
     @After
@@ -85,9 +77,9 @@ class CurrencyConversionRepositoryTest {
 
         //  Assert
         coVerify(exactly = 1) { currencyConversionRepositoryImpl.getAllCurrencyConversions() }
-//        Assertions.assertEquals(expectedLiveData, result)
-//        println(expectedLiveData)
-//        println(result)
+        Assertions.assertEquals(expectedLiveData, result)
+        println(expectedLiveData)
+        println(result)
     }
 
     /*

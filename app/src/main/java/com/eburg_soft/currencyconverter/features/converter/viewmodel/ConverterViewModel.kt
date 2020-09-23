@@ -45,24 +45,24 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
     // TODO: 22.09.2020 fix method 
     private fun checkHistorySize() {
         viewModelScope.launch {
-        val currencyConversionListMediatorLiveData: MediatorLiveData<List<CurrencyConversionEntity>> =
-            MediatorLiveData()
-        val source = currencyConversionRepository.getAllCurrencyConversions()
+            val currencyConversionListMediatorLiveData: MediatorLiveData<List<CurrencyConversionEntity>> =
+                MediatorLiveData()
+            val source = currencyConversionRepository.getAllCurrencyConversions()
 //        val source = null
 
-        currencyConversionListMediatorLiveData.addSource(source) {
-            if (it != null) {
-                currencyConversionListMediatorLiveData.value = it
+            currencyConversionListMediatorLiveData.addSource(source) {
+                if (it != null) {
+                    currencyConversionListMediatorLiveData.value = it
+                }
+                currencyConversionListMediatorLiveData.removeSource(source)
             }
-            currencyConversionListMediatorLiveData.removeSource(source)
-        }
 
-        val liveData: LiveData<List<CurrencyConversionEntity>> =
-            currencyConversionRepository.getAllCurrencyConversions()
+            val liveData: LiveData<List<CurrencyConversionEntity>> =
+                currencyConversionRepository.getAllCurrencyConversions()
 //        val value = currencyConversionListMediatorLiveData.value
-        val value = liveData.value
-        val size = value?.size
-        isExistingHistoryMutableLiveData.value = size!! > 0
+            val value = liveData.value
+            val size = value?.size
+            isExistingHistoryMutableLiveData.value = size!! > 0
         }
     }
 
