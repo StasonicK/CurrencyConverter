@@ -83,6 +83,7 @@ class ConverterFragment : Fragment() {
                 }
             }
         }
+//        showHistoryAction(false)
     }
 
     private fun setupListeners() {

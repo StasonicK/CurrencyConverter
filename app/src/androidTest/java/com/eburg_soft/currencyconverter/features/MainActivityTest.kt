@@ -31,7 +31,7 @@ class MainActivityTest {
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun mainActivityTest2() {
+    fun mainActivityTest() {
         val appCompatEditText = onView(
             allOf(
                 withId(R.id.etFirstCurrencyNumber),

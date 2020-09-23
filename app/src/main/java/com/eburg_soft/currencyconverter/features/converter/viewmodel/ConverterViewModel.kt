@@ -42,11 +42,13 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
 //        checkHistorySize()
     }
 
+    // TODO: 22.09.2020 fix method 
     private fun checkHistorySize() {
-//        viewModelScope.launch {
-        var currencyConversionListMediatorLiveData: MediatorLiveData<List<CurrencyConversionEntity>> =
+        viewModelScope.launch {
+        val currencyConversionListMediatorLiveData: MediatorLiveData<List<CurrencyConversionEntity>> =
             MediatorLiveData()
         val source = currencyConversionRepository.getAllCurrencyConversions()
+//        val source = null
 
         currencyConversionListMediatorLiveData.addSource(source) {
             if (it != null) {
@@ -55,11 +57,13 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
             currencyConversionListMediatorLiveData.removeSource(source)
         }
 
-//        val liveData = currencyConversionRepository.getAllCurrencyConversions()
-        val value = currencyConversionListMediatorLiveData.value
+        val liveData: LiveData<List<CurrencyConversionEntity>> =
+            currencyConversionRepository.getAllCurrencyConversions()
+//        val value = currencyConversionListMediatorLiveData.value
+        val value = liveData.value
         val size = value?.size
         isExistingHistoryMutableLiveData.value = size!! > 0
-//        }
+        }
     }
 
     /*
@@ -109,10 +113,10 @@ class ConverterViewModel @Inject constructor(private val currencyConversionRepos
                 )
                 secondCurrenciesNumberMutableLiveData.value = firstCurrencyNumber.toDouble()
             }
+//            checkHistorySize()
             delay(300)
             isLoadingMutableLiveData.value = false
         }
-//        checkHistorySize()
     }
 
     private fun onResultError(exception: Exception?) {
