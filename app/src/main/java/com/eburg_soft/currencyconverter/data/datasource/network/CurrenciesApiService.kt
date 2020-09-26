@@ -8,9 +8,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+private const val BASE_URL = "https://api.exchangeratesapi.io/"
+
 object CurrenciesApiService {
 
-    fun currencyApi(baseUrl: String): CurrenciesApi = retrofitInstance(baseUrl).create(CurrenciesApi::class.java)
+    fun currencyApi(): CurrenciesApi = retrofitInstance().create(CurrenciesApi::class.java)
 
     private fun okHttpInstance(): OkHttpClient {
         val logging = HttpLoggingInterceptor()
@@ -26,9 +28,9 @@ object CurrenciesApiService {
             .setLenient()
             .create()
 
-    private fun retrofitInstance(baseUrl: String): Retrofit {
+    private fun retrofitInstance(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_URL)
             .client(okHttpInstance())
             .addConverterFactory(GsonConverterFactory.create(gsonInstance()))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
