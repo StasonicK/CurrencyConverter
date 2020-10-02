@@ -53,14 +53,10 @@ class CurrencyConversionAdapter : RecyclerView.Adapter<CurrencyConversionHolder>
         this.notifyItemRemoved(position)
     }
 
-    fun updateAdapter(updatedList: List<CurrencyConversionEntity>) {
-        val result = DiffUtil.calculateDiff(CurrencyConversionsDiffCallback(currencyConversions, updatedList))
-        this.currencyConversions.addAll(updatedList)
-        result.dispatchUpdatesTo(this)
-    }
-
     fun setData(currencyConversions: List<CurrencyConversionEntity>) {
+        this.currencyConversions.clear()
         this.currencyConversions.addAll(currencyConversions)
+        this.notifyDataSetChanged()
     }
 }
 

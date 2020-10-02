@@ -133,7 +133,6 @@ class HistoryFragment : Fragment() {
         recycler_view_currency_conversions.apply {
             layoutManager = LinearLayoutManager(requireContext())
             currencyConversionAdapter.setData(currencyConversions)
-            currencyConversionAdapter.updateAdapter(currencyConversions)
             adapter = currencyConversionAdapter
             setHasFixedSize(true)
         }
@@ -151,10 +150,6 @@ class HistoryFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 viewModel.remove(currencyConversionAdapter.getCurrencyConversionAt(position))
                 currencyConversionAdapter.removeCurrencyConversion(position)
-//                currencyConversionAdapter.notifyItemRemoved(position)
-//                val count = currencyConversionAdapter.itemCount - position
-//                currencyConversionAdapter.notifyItemRangeChanged(position, count)
-//                currencyConversionAdapter.notifyDataSetChanged()
             }
         }).attachToRecyclerView(recycler_view_currency_conversions)
     }
